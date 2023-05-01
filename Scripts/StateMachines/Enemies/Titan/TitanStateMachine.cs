@@ -37,12 +37,13 @@ public class TitanStateMachine : StateMachine
     public bool isDetectedPlayed = false;
     private bool firstTimeSeePlayer = true;
     private BaseStats TitanBaseStats;
-    private bool isActionMusicStart = false;
+    private AudioController titanAudioController;
 
     private void Start()
     {
         PlayerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
         TitanBaseStats = GetComponent<BaseStats>(); 
+        titanAudioController = GetComponent<AudioController>();
 
         if(Agent != null){
             Agent.updatePosition = false;
@@ -174,26 +175,14 @@ public class TitanStateMachine : StateMachine
         Destroy(gameObject, time);
     }
 
-    public bool GetIsActionMusicStart()
-    {
-        return isActionMusicStart;
-    }
-
-    public void SetIsActionMusicStart(bool newValue)
-    {
-        isActionMusicStart = newValue;
-    }
-
     public void StartActionMusic() 
     {
         GetWarriorPlayerStateMachine().StopAmbientMusic();
-        SetIsActionMusicStart(true);
         GetWarriorPlayerStateMachine().StartActionMusic();
     }
     public void StartAmbientMusic()
     {
         GetWarriorPlayerStateMachine().StopActionMusic();
-        SetIsActionMusicStart(false);
         GetWarriorPlayerStateMachine().StartAmbientMusic();
     }
 
@@ -204,6 +193,11 @@ public class TitanStateMachine : StateMachine
         float playerDistanceSqr = (PlayerHealth.transform.position - transform.position).sqrMagnitude;
 
         return playerDistanceSqr <= (PlayerChasingRange + 12) * (PlayerChasingRange + 12);
+    }
+
+    public void SetAudioControllerIsAttacking(bool newValue)
+    {
+        titanAudioController.SetIsMonsterAttacking(newValue);
     }
 
 //Unity animator event

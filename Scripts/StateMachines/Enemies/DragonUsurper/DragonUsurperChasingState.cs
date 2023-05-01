@@ -23,18 +23,14 @@ public class DragonUsurperChasingState : DragonUsurperBaseState
         stateMachine.StopAllCourritines();
         stateMachine.StopParticlesEffects();
         stateMachine.DesactiveAllDragonUsurperWeapon();
-        
         if(firsTimeToFollowCharater)
         {
             firsTimeToFollowCharater = false;
             stateMachine.SetChasingRange(stateMachine.PlayerChasingRange + 5f);            
         }
 
-        if(!stateMachine.GetIsActionMusicStart())
-        {
-            stateMachine.StartActionMusic();
-        }
-
+        stateMachine.StartActionMusic();
+        stateMachine.SetAudioControllerIsAttacking(true);
         stateMachine.Animator.SetFloat(LocomotionHash, 1f);
         stateMachine.Animator.CrossFadeInFixedTime(LocomotionBlendTreeHash, CrossFadeDuration);
         stateMachine.isDetectedPlayed = true;
@@ -59,10 +55,8 @@ public class DragonUsurperChasingState : DragonUsurperBaseState
 
         if(!IsInChaseRange())
         {
-            if(stateMachine.GetIsActionMusicStart())
-            {
-                stateMachine.StartAmbientMusic();
-            }
+            stateMachine.SetAudioControllerIsAttacking(false);
+            stateMachine.StartAmbientMusic();
             stateMachine.isDetectedPlayed = false;
             stateMachine.SwitchState(new DragonUsurperPatrolPathState(stateMachine));
             return;

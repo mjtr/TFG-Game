@@ -11,6 +11,7 @@ public class TrollDeadState : TrollBaseState
 
     public override void Enter()
     {
+        stateMachine.SetAudioControllerIsAttacking(false);
         stateMachine.GetWarriorPlayerEvents().WarriorOnAttack?.Invoke();
         stateMachine.PlayGetHitEffect();
         stateMachine.StopAllCourritines();

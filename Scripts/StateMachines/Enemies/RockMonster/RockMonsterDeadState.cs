@@ -10,7 +10,8 @@ public class RockMonsterDeadState : RockMonsterBaseState
     public RockMonsterDeadState(RockMonsterStateMachine stateMachine) : base(stateMachine){ }
 
     public override void Enter()
-    {
+    {   
+        stateMachine.SetAudioControllerIsAttacking(false);
         stateMachine.GetWarriorPlayerEvents().WarriorOnAttack?.Invoke();
         stateMachine.PlayGetHitEffect();
         stateMachine.StopSounds();

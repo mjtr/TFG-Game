@@ -82,4 +82,9 @@ public class Targeter : MonoBehaviour
         return targets.Count > 1;
     }
 
+    public List<Target> GetPlayerTargets()
+    {
+        return targets;
+    }
+
 }

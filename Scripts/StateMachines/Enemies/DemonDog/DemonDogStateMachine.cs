@@ -36,13 +36,13 @@ public class DemonDogStateMachine : StateMachine
     public bool isDetectedPlayed = false;
 
     private BaseStats DemonDogBaseStats;
-    private bool isActionMusicStart = false;
+    private AudioController demonDogAudioController;
 
     private void Start()
     {
         PlayerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
         DemonDogBaseStats = GetComponent<BaseStats>(); 
-
+        demonDogAudioController = gameObject.GetComponent<AudioController>();
         Agent.updatePosition = false;
         Agent.updateRotation = false;
 
@@ -157,26 +157,19 @@ public class DemonDogStateMachine : StateMachine
         return playerDistanceSqr <= (PlayerChasingRange + 20) * (PlayerChasingRange + 20);
     }
 
-    public bool GetIsActionMusicStart()
+    public void SetAudioControllerIsAttacking(bool newValue)
     {
-        return isActionMusicStart;
-    }
-
-    public void SetIsActionMusicStart(bool newValue)
-    {
-        isActionMusicStart = newValue;
+        demonDogAudioController.SetIsMonsterAttacking(newValue);
     }
 
     public void StartActionMusic() 
     {
         GetWarriorPlayerStateMachine().StopAmbientMusic();
-        SetIsActionMusicStart(true);
-        GetWarriorPlayerStateMachine().StartActionMusic2();
+        GetWarriorPlayerStateMachine().StartActionMusic();
     }
     public void StartAmbientMusic()
     {
-        GetWarriorPlayerStateMachine().StopActionMusic2();
-        SetIsActionMusicStart(false);
+        GetWarriorPlayerStateMachine().StopActionMusic();
         GetWarriorPlayerStateMachine().StartAmbientMusic();
     }
 

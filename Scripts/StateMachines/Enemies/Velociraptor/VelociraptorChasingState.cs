@@ -29,11 +29,9 @@ public class VelociraptorChasingState : VelociraptorBaseState
             stateMachine.SetChasingRange(stateMachine.PlayerChasingRange + 3f);
         }
 
-        if(!stateMachine.GetIsActionMusicStart())
-        {
-            stateMachine.StartActionMusic();
-        }
-
+        stateMachine.StartActionMusic();
+        stateMachine.SetAudioControllerIsAttacking(true);
+        
         stateMachine.Animator.SetFloat(LocomotionHash, 1f);
         stateMachine.Animator.CrossFadeInFixedTime(LocomotionBlendTreeHash, CrossFadeDuration);
         stateMachine.isDetectedPlayed = true;
@@ -58,12 +56,10 @@ public class VelociraptorChasingState : VelociraptorBaseState
 
         if(!IsInChaseRange())
         {
-            if(stateMachine.GetIsActionMusicStart())
-            {
-                stateMachine.StartAmbientMusic();
-            }
-            
+          
             stateMachine.isDetectedPlayed = false;
+            stateMachine.SetAudioControllerIsAttacking(false);
+            stateMachine.StartAmbientMusic();
             if(stateMachine.PatrolPath != null)
             {
                 stateMachine.SwitchState(new VelociraptorPatrolPathState(stateMachine));

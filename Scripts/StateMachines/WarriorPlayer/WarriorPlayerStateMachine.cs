@@ -48,9 +48,12 @@ public class WarriorPlayerStateMachine : StateMachine
     private bool isTwoHandsWeapon = false;
     private bool canUseSpecialAttack = false;
     private bool isVelociraptorCallingAllies = false;
-    private bool isActionMusicSound = false;
-    private bool isAmbientMusicSound = false;
-    private bool isAction2MusicSound = false;
+
+    private int actionMusicSoundIndex;
+    private int ambientSoundIndex;
+    private bool isBossMusicSound;
+
+    private AudioController audioController;
 
     private void Awake() 
     {
@@ -77,10 +80,14 @@ public class WarriorPlayerStateMachine : StateMachine
     private void Start(){
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        actionMusicSoundIndex = -1;
+        ambientSoundIndex = -1;
+        isBossMusicSound = false;
+        audioController = GetComponent<AudioController>();
+   
         mainCharacterBaseStats = GetComponent<BaseStats>(); 
         MainCameraTransform = Camera.main.transform;
-        EventsToPlay.AmbientMusic?.Invoke();
-        isAmbientMusicSound = true;
+        StartAmbientMusic();
 
         SwitchState(new WarriorPlayerFreeLookState(this));
     }
@@ -114,44 +121,73 @@ public class WarriorPlayerStateMachine : StateMachine
     
     public void StartAmbientMusic()
     {   
-        if(isAmbientMusicSound){return;}
-        isAmbientMusicSound = true;
-        EventsToPlay.AmbientMusic?.Invoke();
+        if(isBossMusicSound){return;}
+        if(ambientSoundIndex >= 0 || actionMusicSoundIndex >= 0){return;}
+        
+        AudioSource[] ambientsAudioSource = audioController.AmbientMusics;
+        ambientSoundIndex = UnityEngine.Random.Range(0,ambientsAudioSource.Length);
+
+        AudioSource ambientAudioSelected = ambientsAudioSource[ambientSoundIndex];
+        ambientAudioSelected.Play();
     }
+
     public void StopAmbientMusic()
     {   
-        if(!isAmbientMusicSound){return;}
-        isAmbientMusicSound = false;
-        EventsToPlay.StopAmbientMusic?.Invoke();
+        if(ambientSoundIndex < 0 || actionMusicSoundIndex > -1){return;}
+        
+        AudioSource ambientAudioSourceToStop = audioController.AmbientMusics[ambientSoundIndex]; 
+        ambientSoundIndex = -1;
+        ambientAudioSourceToStop.Stop();
     }
 
     public void StartActionMusic()
     {   
-        if(isActionMusicSound || isAction2MusicSound){return;}
-        isActionMusicSound = true;
-        EventsToPlay.ActionMusic?.Invoke();
+        if(isBossMusicSound){return;}
+        if(actionMusicSoundIndex > -1){return;}
+
+        AudioSource[] actionsAudioSource = audioController.ActionMusics;
+        actionMusicSoundIndex = UnityEngine.Random.Range(0,actionsAudioSource.Length);
+
+        AudioSource actionAudioSelected = actionsAudioSource[actionMusicSoundIndex];
+        actionAudioSelected.Play();
     }
 
     public void StopActionMusic()
     {   
-        if(!isActionMusicSound){return;}
-        isActionMusicSound = false;
-        EventsToPlay.StopActionMusic?.Invoke();
+        if(actionMusicSoundIndex < 0){return;}
+        bool existOtherEnemiesAtacking = false;
+        foreach(var target in Targeter.GetPlayerTargets())
+        {
+           AudioController audioController = target.GetComponent<AudioController>();
+           if(audioController != null)
+           {
+                existOtherEnemiesAtacking = audioController.GetIsMonsterAttacking();
+                if(existOtherEnemiesAtacking){return;}
+           }
+        }
+
+        AudioSource actionAudioSourceToStop = audioController.ActionMusics[actionMusicSoundIndex]; 
+        actionMusicSoundIndex = -1;
+        actionAudioSourceToStop.Stop();
     }
 
-    public void StartActionMusic2()
+    public void StartEpicMusic()
     {   
-        if(isAction2MusicSound || isActionMusicSound){return;}
-        isAction2MusicSound = true;
-        EventsToPlay.ActionMusic2?.Invoke();
+        if(actionMusicSoundIndex > -1 ){
+            AudioSource actionAudioSourceToStop = audioController.ActionMusics[actionMusicSoundIndex]; 
+            actionMusicSoundIndex = -1;
+            actionAudioSourceToStop.Stop();
+        }
+
+        if(ambientSoundIndex > -1 ){
+            AudioSource ambientAudioSourceToStop = audioController.AmbientMusics[ambientSoundIndex]; 
+            ambientSoundIndex = -1;
+            ambientAudioSourceToStop.Stop();
+        }
+        isBossMusicSound = true;
+        audioController.BossMusic.Play();
     }
 
-    public void StopActionMusic2()
-    {   
-        if(!isAction2MusicSound){return;}
-        isAction2MusicSound = false;
-        EventsToPlay.StopActionMusic2?.Invoke();
-    }
 
     private void OnEnable()
     {

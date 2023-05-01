@@ -33,14 +33,14 @@ public class MushroomStateMachine : StateMachine
     public Health PlayerHealth {get; private set;} 
 
     private BaseStats MushroomBaseStats;
-    private bool isActionMusicStart = false;
-
     private bool isFirstTimeToSeePlayer = true;
+    private AudioController mushroomAudioController;
 
     private void Start()
     {
         PlayerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
         MushroomBaseStats = GetComponent<BaseStats>(); 
+        mushroomAudioController = GetComponent<AudioController>();
 
         Agent.updatePosition = false;
         Agent.updateRotation = false;
@@ -153,27 +153,20 @@ public class MushroomStateMachine : StateMachine
         EffectsToPlay.PlayGetHitEffect(); 
     }
 
-    public bool GetIsActionMusicStart()
-    {
-        return isActionMusicStart;
-    }
-
-    public void SetIsActionMusicStart(bool newValue)
-    {
-        isActionMusicStart = newValue;
-    }
-
     public void StartActionMusic() 
     {
         GetWarriorPlayerStateMachine().StopAmbientMusic();
-        SetIsActionMusicStart(true);
-        GetWarriorPlayerStateMachine().StartActionMusic2();
+        GetWarriorPlayerStateMachine().StartActionMusic();
     }
     public void StartAmbientMusic()
     {
-        GetWarriorPlayerStateMachine().StopActionMusic2();
-        SetIsActionMusicStart(false);
+        GetWarriorPlayerStateMachine().StopActionMusic();
         GetWarriorPlayerStateMachine().StartAmbientMusic();
+    }
+
+    public void SetAudioControllerIsAttacking(bool newValue)
+    {
+        mushroomAudioController.SetIsMonsterAttacking(newValue);
     }
 
 //Unity animator event

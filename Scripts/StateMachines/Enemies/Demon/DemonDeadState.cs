@@ -11,6 +11,7 @@ public class DemonDeadState : DemonBaseState
 
     public override void Enter()
     {
+        stateMachine.SetAudioControllerIsAttacking(false);
         stateMachine.DesactiveAllDemonWeapon();
         stateMachine.GetWarriorPlayerEvents().WarriorOnAttack?.Invoke();
         stateMachine.PlayGetHitEffect();

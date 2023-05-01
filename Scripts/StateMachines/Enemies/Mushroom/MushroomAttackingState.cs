@@ -32,6 +32,7 @@ public class MushroomAttackingState : MushroomBaseState
     public override void Tick(float deltaTime) { }
 
     public override void Exit(){
+        stateMachine.Agent.enabled = true;
         stateMachine.Agent.ResetPath();
         stateMachine.Agent.enabled = false;
         stateMachine.Agent.enabled = true;

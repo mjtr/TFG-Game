@@ -26,11 +26,9 @@ public class TrollChasingState : TrollBaseState
             chasingRangeToAdd = 1.5f;
         }
         
-        if(!stateMachine.GetIsActionMusicStart())
-        {
-            stateMachine.StartActionMusic();
-        }
-
+        stateMachine.StartActionMusic();
+        stateMachine.SetAudioControllerIsAttacking(true);
+        
         stateMachine.SetChasingRange(stateMachine.PlayerChasingRange + chasingRangeToAdd);
         stateMachine.Animator.SetFloat(LocomotionHash, 1f);
         stateMachine.Animator.CrossFadeInFixedTime(LocomotionBlendTreeHash, CrossFadeDuration);
@@ -44,10 +42,8 @@ public class TrollChasingState : TrollBaseState
 
         if(!IsInChaseRange())
         {
-            if(stateMachine.GetIsActionMusicStart())
-            {
-                stateMachine.StartAmbientMusic();
-            }
+            stateMachine.SetAudioControllerIsAttacking(false);
+            stateMachine.StartAmbientMusic();
 
             stateMachine.isDetectedPlayed = false;
             stateMachine.SwitchState(new TrollPatrolPathState(stateMachine));

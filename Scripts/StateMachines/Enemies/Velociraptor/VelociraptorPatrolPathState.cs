@@ -19,6 +19,7 @@ public class VelociraptorPatrolPathState : VelociraptorBaseState
 
     public override void Enter()
     {
+        stateMachine.StartAmbientMusic();
         player = GameObject.FindGameObjectWithTag("Player");
         guardPosition = stateMachine.transform.position;   
         stateMachine.Animator.CrossFadeInFixedTime(LocomotionBlendTreeHash, AnimatorDampTime);

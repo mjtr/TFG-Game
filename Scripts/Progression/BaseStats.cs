@@ -61,8 +61,8 @@ namespace RPG.Stats
                 {
                     WarriorPlayerStateMachine warriorPlayerStateMachine =  GameObject.FindWithTag("Player").GetComponent<WarriorPlayerStateMachine>();
                     warriorPlayerStateMachine.SetCanUseSpecialAttack();
-                    string controlsMessage = "¡Enhorabuena!, ahora puedes usar ataques especiales\n\nPara poder usarlo tienes tienes que usar la barra espaciadora\n\nPero cuidado, que consumirás mucha energía\n\n";
-                    PixelCrushers.DialogueSystem.DialogueManager.ShowAlert(controlsMessage,5f);
+                    string controlsMessage = "¡Enhorabuena!, ahora puedes usar ataques especiales\n\nPara poder usarlo tienes tienes que usar la barra espaciadora\n\nCada arma tiene su propio ataque especial\n\nPero cuidado, que consumirás mucha energía\n\n";
+                    PixelCrushers.DialogueSystem.DialogueManager.ShowAlert(controlsMessage,10f);
                 }
            }
         }

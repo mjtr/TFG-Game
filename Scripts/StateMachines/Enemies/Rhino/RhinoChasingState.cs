@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RhinoChasingState : RhinoBaseState
@@ -22,12 +19,8 @@ public class RhinoChasingState : RhinoBaseState
 
     public override void Enter()
     {
-    
-        if(!stateMachine.GetIsActionMusicStart())
-        {
-            stateMachine.StartActionMusic();
-        }
-
+        stateMachine.StartActionMusic();
+        stateMachine.SetAudioControllerIsAttacking(true);
         stateMachine.StopAllCourritines();
         stateMachine.StopParticlesEffects();
         stateMachine.DesactiveAllRhinoWeapon();
@@ -40,11 +33,8 @@ public class RhinoChasingState : RhinoBaseState
 
         if(!IsInChaseRange())
         {
-
-            if(stateMachine.GetIsActionMusicStart())
-            {
-                stateMachine.StartAmbientMusic();
-            }
+            stateMachine.SetAudioControllerIsAttacking(false);
+            stateMachine.StartAmbientMusic();
             
             stateMachine.isDetectedPlayed = false;
             if(stateMachine.PatrolPath != null)

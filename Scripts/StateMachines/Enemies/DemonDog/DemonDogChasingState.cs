@@ -27,12 +27,8 @@ public class DemonDogChasingState : DemonDogBaseState
             isFirstTime = false;
             stateMachine.SetPlayerChasingRange(stateMachine.PlayerChasingRange + 4f);
         }
-
-        if(!stateMachine.GetIsActionMusicStart())
-        {
-            stateMachine.StartActionMusic();
-        }
-
+        stateMachine.StartActionMusic();
+        stateMachine.SetAudioControllerIsAttacking(true);
         stateMachine.StopAllCourritines();
         stateMachine.StopParticlesEffects();
         stateMachine.DesactiveAllDemonDogWeapon();
@@ -46,17 +42,15 @@ public class DemonDogChasingState : DemonDogBaseState
         if(!IsInChaseRange())
         {
 
-            if(stateMachine.GetIsActionMusicStart())
-            {
-                stateMachine.StartAmbientMusic();
-            }
-            
+            stateMachine.SetAudioControllerIsAttacking(false);
+            stateMachine.StartAmbientMusic();
             stateMachine.isDetectedPlayed = false;
             if(stateMachine.PatrolPath != null)
             {
                 stateMachine.SwitchState(new DemongDogPatrolPathState(stateMachine));
                 return; 
             }
+            stateMachine.SwitchState(new DemonDogIdleState(stateMachine));
             return; 
         
         }else if(isInAttackRange()){

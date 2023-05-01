@@ -13,7 +13,7 @@ public class MushroomChasingState : MushroomBaseState
     private const float CrossFadeDuration = 0.1f;
     private const float AnimatorDampTime = 0.1f;
 
-    private const float chasingRangeToAdd = 6.1f;
+    private const float chasingRangeToAdd = 40f;
 
     private int timeToResetNavMesh = 0;
 
@@ -23,10 +23,8 @@ public class MushroomChasingState : MushroomBaseState
 
     public override void Enter()
     {
-        if(!stateMachine.GetIsActionMusicStart())
-        {
-            stateMachine.StartActionMusic();
-        }
+        stateMachine.SetAudioControllerIsAttacking(true);
+        stateMachine.StartActionMusic();
         stateMachine.StopAllCourritines();
         stateMachine.StopParticlesEffects();
         stateMachine.DesactiveAllDemonWeapon();

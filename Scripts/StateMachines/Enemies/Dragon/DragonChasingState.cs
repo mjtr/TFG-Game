@@ -27,12 +27,8 @@ public class DragonChasingState : DragonBaseState
         stateMachine.StopAllCourritines();
         stateMachine.StopParticlesEffects();
         stateMachine.DesactiveAllDragonWeapon();
-
-        if(!stateMachine.GetIsActionMusicStart())
-        {
-            stateMachine.StartActionMusic();
-        }
-        
+        stateMachine.SetAudioControllerIsAttacking(true);
+        stateMachine.StartActionMusic();
         stateMachine.SetChasingRange(stateMachine.PlayerChasingRange + chasingRangeToAdd);
         stateMachine.Animator.SetFloat(LocomotionHash, 1f);
         stateMachine.Animator.CrossFadeInFixedTime(LocomotionBlendTreeHash, CrossFadeDuration);
@@ -45,11 +41,8 @@ public class DragonChasingState : DragonBaseState
         
         if(!IsInChaseRange())
         {
-            if(stateMachine.GetIsActionMusicStart())
-            {
-                stateMachine.StartAmbientMusic();
-            }
-            
+            stateMachine.SetAudioControllerIsAttacking(false);
+            stateMachine.StartAmbientMusic();
             stateMachine.isDetectedPlayed = false;
             stateMachine.SwitchState(new DragonIdleState(stateMachine));
             return;
@@ -80,8 +73,8 @@ public class DragonChasingState : DragonBaseState
         timeToResetNavMesh ++;
         if(timeToResetNavMesh > 200)
         {
-            Debug.Log("Resetamos el navMesh del dragon");
             timeToResetNavMesh = 0;
+            stateMachine.Agent.enabled = true;
             stateMachine.Agent.ResetPath();
             stateMachine.Agent.enabled = false;
             stateMachine.Agent.enabled = true;

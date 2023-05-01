@@ -10,7 +10,7 @@ public class VelociraptorDeadState : VelociraptorBaseState
 
     public override void Enter()
     {
-
+        stateMachine.SetAudioControllerIsAttacking(false);
         GetRandomVelociraptorDeath();
         stateMachine.GetWarriorPlayerEvents().WarriorOnAttack?.Invoke();
         stateMachine.PlayGetHitEffect();

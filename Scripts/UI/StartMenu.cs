@@ -5,10 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class StartMenu : MonoBehaviour
 {
+
+   private bool firstTime;
    
    public void StartGame()
    {
-      SceneManager.LoadScene("MainGame");
+      if(firstTime){
+         firstTime = false;
+         SceneManager.LoadScene("MainGame");
+      }
+      
    }
 
    public void QuitGame()
@@ -19,5 +25,6 @@ public class StartMenu : MonoBehaviour
    private void Start() {
       Cursor.lockState = CursorLockMode.None;
       Cursor.visible = true;
+      firstTime = true;
    }
 }

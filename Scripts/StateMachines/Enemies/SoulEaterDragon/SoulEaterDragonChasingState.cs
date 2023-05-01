@@ -27,11 +27,8 @@ public class SoulEaterDragonChasingState : SoulEaterDragonBaseState
         stateMachine.StopParticlesEffects();
         stateMachine.DesactiveAllSoulEaterDragonWeapon();
         
-        if(!stateMachine.GetIsActionMusicStart())
-        {
-            stateMachine.StartActionMusic();
-        }
-
+        stateMachine.StartActionMusic();
+        stateMachine.SetAudioControllerIsAttacking(true);
         stateMachine.SetChasingRange(stateMachine.PlayerChasingRange + chasingRangeToAdd);
         stateMachine.Animator.SetFloat(LocomotionHash, 1f);
         stateMachine.Animator.CrossFadeInFixedTime(LocomotionBlendTreeHash, CrossFadeDuration);
@@ -56,13 +53,16 @@ public class SoulEaterDragonChasingState : SoulEaterDragonBaseState
 
         if(!IsInChaseRange())
         {
-            if(stateMachine.GetIsActionMusicStart())
-            {
-                stateMachine.StartAmbientMusic();
-            }
+            stateMachine.SetAudioControllerIsAttacking(false);
+            stateMachine.StartAmbientMusic();
+            
             stateMachine.isDetectedPlayed = false;
-            //Vamos a hacer aquí que el dragon patrulle
-            stateMachine.SwitchState(new SoulEaterDragonPatrolPathState(stateMachine));
+            if(stateMachine.PatrolPath != null)
+            {
+                stateMachine.SwitchState(new SoulEaterDragonPatrolPathState(stateMachine));
+                return;
+            }
+            stateMachine.SwitchState(new SoulEaterDragonIdleState(stateMachine));
             return;
         
         }else if(isInAttackRange()){

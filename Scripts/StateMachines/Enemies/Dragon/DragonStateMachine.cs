@@ -32,16 +32,16 @@ public class DragonStateMachine : StateMachine
 
     //Variables para el patrullaje
     [field: SerializeField] public float ChaseDistance = 8f;
-
     public Health PlayerHealth {get; private set;} 
     public bool isDetectedPlayed = false;
     private BaseStats DragonBaseStats;
-    private bool isActionMusicStart = false;
+    private AudioController dragonAudioController;
 
     private void Start()
     {
         PlayerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
         DragonBaseStats = GetComponent<BaseStats>(); 
+        dragonAudioController = gameObject.GetComponent<AudioController>();
 
         if(Agent != null){
             Agent.updatePosition = false;
@@ -148,32 +148,25 @@ public class DragonStateMachine : StateMachine
         Destroy(gameObject, time);
     }
 
-    public bool GetIsActionMusicStart()
-    {
-        return isActionMusicStart;
-    }
-
-    public void SetIsActionMusicStart(bool newValue)
-    {
-        isActionMusicStart = newValue;
-    }
-
     public void StartActionMusic() 
     {
         GetWarriorPlayerStateMachine().StopAmbientMusic();
-        SetIsActionMusicStart(true);
         GetWarriorPlayerStateMachine().StartActionMusic();
     }
     public void StartAmbientMusic()
     {
         GetWarriorPlayerStateMachine().StopActionMusic();
-        SetIsActionMusicStart(false);
         GetWarriorPlayerStateMachine().StartAmbientMusic();
     }
 
     public void StopDragonSounds()
     {
         gameObject.GetComponent<SFB_AudioManager>().StopLoop();
+    }
+
+    public void SetAudioControllerIsAttacking(bool newValue)
+    {
+        dragonAudioController.SetIsMonsterAttacking(newValue);
     }
 
 //Unity animator event

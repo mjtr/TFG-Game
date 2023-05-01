@@ -10,6 +10,7 @@ public class DragonNightmareDeadState : DragonNightmareBaseState
 
     public override void Enter()
     {
+        stateMachine.SetAudioControllerIsAttacking(false);
         stateMachine.GetWarriorPlayerEvents().WarriorOnAttack?.Invoke();
         stateMachine.PlayGetHitEffect();
         stateMachine.StopAllCourritines();

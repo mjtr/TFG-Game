@@ -41,12 +41,13 @@ public class RockMonsterStateMachine : StateMachine
     public bool isDetectedPlayed = false;
     
     private BaseStats RockMonsterBaseStats;
-    private bool isActionMusicStart = false;
+    private AudioController rockMonsterAudioController;
 
     private void Start()
     {
         PlayerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
-        RockMonsterBaseStats = GetComponent<BaseStats>(); 
+        RockMonsterBaseStats = GetComponent<BaseStats>();
+        rockMonsterAudioController = GetComponent<AudioController>(); 
 
         if(Agent != null){
             Agent.updatePosition = false;
@@ -163,27 +164,20 @@ public class RockMonsterStateMachine : StateMachine
         Agent.enabled = true;
     }
 
-    public bool GetIsActionMusicStart()
-    {
-        return isActionMusicStart;
-    }
-
-    public void SetIsActionMusicStart(bool newValue)
-    {
-        isActionMusicStart = newValue;
-    }
-
     public void StartActionMusic() 
     {
         GetWarriorPlayerStateMachine().StopAmbientMusic();
-        SetIsActionMusicStart(true);
         GetWarriorPlayerStateMachine().StartActionMusic();
     }
     public void StartAmbientMusic()
     {
         GetWarriorPlayerStateMachine().StopActionMusic();
-        SetIsActionMusicStart(false);
         GetWarriorPlayerStateMachine().StartAmbientMusic();
+    }
+
+    public void SetAudioControllerIsAttacking(bool newValue)
+    {
+        rockMonsterAudioController.SetIsMonsterAttacking(newValue);
     }
 
 //Unity animator event

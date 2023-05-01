@@ -30,11 +30,8 @@ public class DevilChasingState : DevilBaseState
             chasingRangeToAdd = 1.5f;
         }
 
-        if(!stateMachine.GetIsActionMusicStart())
-        {
-            stateMachine.StartActionMusic();
-        }
-
+        stateMachine.StartActionMusic();
+        stateMachine.SetAudioControllerIsAttacking(true);
         stateMachine.SetChasingRange(stateMachine.PlayerChasingRange + chasingRangeToAdd);
         stateMachine.Animator.CrossFadeInFixedTime(WalkHash, CrossFadeDuration);
         stateMachine.isDetectedPlayed = true;
@@ -63,11 +60,8 @@ public class DevilChasingState : DevilBaseState
 
         if(!IsInChaseRange())
         {
-            if(stateMachine.GetIsActionMusicStart())
-            {
-                stateMachine.StartAmbientMusic();
-            }
-            
+            stateMachine.SetAudioControllerIsAttacking(false);
+            stateMachine.StartAmbientMusic();
             stateMachine.isDetectedPlayed = false;
             stateMachine.SwitchState(new DevilPatrolPathState(stateMachine));
             return;

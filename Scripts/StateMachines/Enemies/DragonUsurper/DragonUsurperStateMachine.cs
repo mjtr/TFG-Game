@@ -42,19 +42,16 @@ public class DragonUsurperStateMachine : StateMachine
     [field:SerializeField] public float PatrolSpeedFraction = 0.8f;
 
     public Health PlayerHealth {get; private set;} 
-
     public bool isDetectedPlayed = false;
-
     private bool firstTimeToSeePlayer = true;
-    
     private BaseStats DragonUsurperBaseStats;
-    private bool isActionMusicStart = false;
+    private AudioController dragonUsurperDragonController;
 
     private void Start()
     {
         PlayerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
         DragonUsurperBaseStats = GetComponent<BaseStats>(); 
-
+        dragonUsurperDragonController = gameObject.GetComponent<AudioController>();
         if(Agent != null){
             Agent.updatePosition = false;
             Agent.updateRotation = false;
@@ -178,27 +175,20 @@ public class DragonUsurperStateMachine : StateMachine
         Destroy(gameObject, time);
     }
 
-    public bool GetIsActionMusicStart()
-    {
-        return isActionMusicStart;
-    }
-
-    public void SetIsActionMusicStart(bool newValue)
-    {
-        isActionMusicStart = newValue;
-    }
-
     public void StartActionMusic() 
     {
         GetWarriorPlayerStateMachine().StopAmbientMusic();
-        SetIsActionMusicStart(true);
         GetWarriorPlayerStateMachine().StartActionMusic();
     }
     public void StartAmbientMusic()
     {
         GetWarriorPlayerStateMachine().StopActionMusic();
-        SetIsActionMusicStart(false);
         GetWarriorPlayerStateMachine().StartAmbientMusic();
+    }
+
+    public void SetAudioControllerIsAttacking(bool newValue)
+    {
+        dragonUsurperDragonController.SetIsMonsterAttacking(newValue);
     }
 
 //Unity animator event

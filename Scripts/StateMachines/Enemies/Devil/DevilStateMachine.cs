@@ -37,19 +37,17 @@ public class DevilStateMachine : StateMachine
     [field:SerializeField] public float PatrolSpeedFraction = 0.8f;
 
     public Health PlayerHealth {get; private set;} 
-
     public bool isDetectedPlayed = false;
-
     private bool firstTimeSeePlayer = true;
+    private AudioController devilAudioController;
     
     private BaseStats DevilBaseStats;
-    private bool isActionMusicStart = false;
 
     private void Start()
     {
         PlayerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
         DevilBaseStats = GetComponent<BaseStats>(); 
-
+        devilAudioController = gameObject.GetComponent<AudioController>();
         if(Agent != null){
             Agent.updatePosition = false;
             Agent.updateRotation = false;
@@ -170,27 +168,20 @@ public class DevilStateMachine : StateMachine
         gameObject.GetComponent<SFB_AudioManager>().StopLoop();
     }
     
-    public bool GetIsActionMusicStart()
-    {
-        return isActionMusicStart;
-    }
-
-    public void SetIsActionMusicStart(bool newValue)
-    {
-        isActionMusicStart = newValue;
-    }
-
     public void StartActionMusic() 
     {
         GetWarriorPlayerStateMachine().StopAmbientMusic();
-        SetIsActionMusicStart(true);
         GetWarriorPlayerStateMachine().StartActionMusic();
     }
     public void StartAmbientMusic()
     {
         GetWarriorPlayerStateMachine().StopActionMusic();
-        SetIsActionMusicStart(false);
         GetWarriorPlayerStateMachine().StartAmbientMusic();
+    }
+
+    public void SetAudioControllerIsAttacking(bool newValue)
+    {
+        devilAudioController.SetIsMonsterAttacking(newValue);
     }
 
 //Unity animator event

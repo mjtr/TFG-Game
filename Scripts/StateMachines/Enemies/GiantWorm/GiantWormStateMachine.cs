@@ -33,12 +33,13 @@ public class GiantWormStateMachine : StateMachine
     public Health PlayerHealth {get; private set;} 
    
     private BaseStats GiantWormBaseStats;
-    private bool isActionMusicStart = false;
+    private AudioController giantWormAudioController;
 
     private void Start()
     {
         PlayerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
         GiantWormBaseStats = GetComponent<BaseStats>(); 
+        giantWormAudioController = gameObject.GetComponent<AudioController>();
 
         if(Agent != null){
             Agent.updatePosition = false;
@@ -125,10 +126,12 @@ public class GiantWormStateMachine : StateMachine
             ps.Stop();
         }
     }
+
     public void DesactiveAllWormWeapon()
     {
         Body.gameObject.SetActive(false);
         Head.gameObject.SetActive(false);
+        DesactivePosionCollider();
     }
     
     public void StopWormSounds()
@@ -156,27 +159,20 @@ public class GiantWormStateMachine : StateMachine
         Instantiate(GiantWormDeathBody, transform.position, transform.rotation);
     }
 
-    public bool GetIsActionMusicStart()
-    {
-        return isActionMusicStart;
-    }
-
-    public void SetIsActionMusicStart(bool newValue)
-    {
-        isActionMusicStart = newValue;
-    }  
-
     public void StartActionMusic() 
     {
         GetWarriorPlayerStateMachine().StopAmbientMusic();
-        SetIsActionMusicStart(true);
-        GetWarriorPlayerStateMachine().StartActionMusic2();
+        GetWarriorPlayerStateMachine().StartActionMusic();
     }
     public void StartAmbientMusic()
     {
-        GetWarriorPlayerStateMachine().StopActionMusic2();
-        SetIsActionMusicStart(false);
+        GetWarriorPlayerStateMachine().StopActionMusic();
         GetWarriorPlayerStateMachine().StartAmbientMusic();
+    }
+
+    public void SetAudioControllerIsAttacking(bool newValue)
+    {
+        giantWormAudioController.SetIsMonsterAttacking(newValue);
     }
 
     //Unity animator event

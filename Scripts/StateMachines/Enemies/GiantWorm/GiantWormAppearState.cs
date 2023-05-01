@@ -22,10 +22,9 @@ public class GiantWormAppearState : GiantWormBaseState
             isFirstTime = false;
             stateMachine.SetChasingRange(stateMachine.PlayerChasingRange + 3f);
         }
-        if(!stateMachine.GetIsActionMusicStart())
-        {
-            stateMachine.StartActionMusic();
-        }
+        stateMachine.StartActionMusic();
+        stateMachine.SetAudioControllerIsAttacking(true);
+        
         stateMachine.StartCoroutine(WaitForAnimationToEnd(GiantWormAppearHash, CrossFadeDuration));
     }
 

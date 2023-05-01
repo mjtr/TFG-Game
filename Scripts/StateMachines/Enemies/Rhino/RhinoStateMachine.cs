@@ -37,12 +37,13 @@ public class RhinoStateMachine : StateMachine
     public bool isDetectedPlayed = false;
 
     private BaseStats RhinoBaseStats;
-    private bool isActionMusicStart = false;
     private bool firstTimeSeePlayer = true;
+    private AudioController rhinoAudioController;
     private void Start()
     {
         PlayerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
         RhinoBaseStats = GetComponent<BaseStats>(); 
+        rhinoAudioController = GetComponent<AudioController>();
 
         if(Agent != null){
             Agent.updatePosition = false;
@@ -182,27 +183,20 @@ public class RhinoStateMachine : StateMachine
         return playerDistanceSqr <= (PlayerChasingRange + 20) * (PlayerChasingRange + 20);
     }
 
-    public bool GetIsActionMusicStart()
-    {
-        return isActionMusicStart;
-    }
-
-    public void SetIsActionMusicStart(bool newValue)
-    {
-        isActionMusicStart = newValue;
-    }
-
     public void StartActionMusic() 
     {
         GetWarriorPlayerStateMachine().StopAmbientMusic();
-        SetIsActionMusicStart(true);
-        GetWarriorPlayerStateMachine().StartActionMusic2();
+        GetWarriorPlayerStateMachine().StartActionMusic();
     }
     public void StartAmbientMusic()
     {
-        GetWarriorPlayerStateMachine().StopActionMusic2();
-        SetIsActionMusicStart(false);
+        GetWarriorPlayerStateMachine().StopActionMusic();
         GetWarriorPlayerStateMachine().StartAmbientMusic();
+    }
+
+    public void SetAudioControllerIsAttacking(bool newValue)
+    {
+        rhinoAudioController.SetIsMonsterAttacking(newValue);
     }
 
 //Unity animator event

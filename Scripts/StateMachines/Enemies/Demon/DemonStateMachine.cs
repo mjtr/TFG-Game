@@ -39,12 +39,13 @@ public class DemonStateMachine : StateMachine
     public bool isDetectedPlayed = false;
     
     private BaseStats DemonBaseStats;
-    private bool isActionMusicStart = false;
+    private AudioController demonAudioController;
 
     private void Start()
     {
         PlayerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
         DemonBaseStats = GetComponent<BaseStats>(); 
+        demonAudioController = gameObject.GetComponent<AudioController>();
 
         if(Agent != null){
             Agent.updatePosition = false;
@@ -76,6 +77,8 @@ public class DemonStateMachine : StateMachine
         GetWarriorPlayerEvents().WarriorOnAttack?.Invoke();
         PlayGetHitEffect();
         isDetectedPlayed = true;
+        SetAudioControllerIsAttacking(true);
+        StartActionMusic();
         if(MustProduceGetHitAnimation())
         {
            SwitchState(new DemonImpactState(this));
@@ -169,16 +172,11 @@ public class DemonStateMachine : StateMachine
         return playerDistanceSqr <= (PlayerChasingRange + 25) * (PlayerChasingRange + 25);
     }
 
-    public bool GetIsActionMusicStart()
+    public void SetAudioControllerIsAttacking(bool newValue)
     {
-        return isActionMusicStart;
+        demonAudioController.SetIsMonsterAttacking(newValue);
     }
-
-    public void SetIsActionMusicStart(bool newValue)
-    {
-        isActionMusicStart = newValue;
-    }
-
+    
     public void ResetNavMesh()
     {
         Agent.enabled = true;
@@ -190,13 +188,11 @@ public class DemonStateMachine : StateMachine
     public void StartActionMusic() 
     {
         GetWarriorPlayerStateMachine().StopAmbientMusic();
-        SetIsActionMusicStart(true);
-        GetWarriorPlayerStateMachine().StartActionMusic2();
+        GetWarriorPlayerStateMachine().StartActionMusic();
     }
     public void StartAmbientMusic()
     {
-        GetWarriorPlayerStateMachine().StopActionMusic2();
-        SetIsActionMusicStart(false);
+        GetWarriorPlayerStateMachine().StopActionMusic();
         GetWarriorPlayerStateMachine().StartAmbientMusic();
     }
 

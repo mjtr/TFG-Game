@@ -41,8 +41,9 @@ public class GiantWormIdleState : GiantWormBaseState
     {
         if(stateMachine.Agent != null && stateMachine.Agent.enabled)
         {
-           stateMachine.Agent.ResetPath();
-           stateMachine.Agent.velocity = Vector3.zero;
+            stateMachine.Agent.enabled = true;
+            stateMachine.Agent.ResetPath();
+            stateMachine.Agent.velocity = Vector3.zero;
         }
     }
 

@@ -12,7 +12,8 @@ public class GiantWormDisappearState : GiantWormBaseState
 
     public override void Enter()
     {
-           stateMachine.StartCoroutine(WaitForAnimationToEnd(GiantWormDisappearHash, CrossFadeDuration));
+        stateMachine.SetAudioControllerIsAttacking(false);
+        stateMachine.StartCoroutine(WaitForAnimationToEnd(GiantWormDisappearHash, CrossFadeDuration));
     }
 
     private IEnumerator WaitForAnimationToEnd(int animationHash, float transitionDuration)
@@ -26,9 +27,6 @@ public class GiantWormDisappearState : GiantWormBaseState
     {}
 
     public override void Exit(){ 
-        if(stateMachine.GetIsActionMusicStart())
-        {
-            stateMachine.StartAmbientMusic();
-        }
+        stateMachine.StartAmbientMusic();
     }
 }

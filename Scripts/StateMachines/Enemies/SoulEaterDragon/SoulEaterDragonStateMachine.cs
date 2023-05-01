@@ -40,14 +40,15 @@ public class SoulEaterDragonStateMachine : StateMachine
     public Health PlayerHealth {get; private set;} 
 
     public bool isDetectedPlayed = false; 
-    private bool isActionMusicStart = false;
+    private AudioController soulEaterDragonAudioController;
 
     private BaseStats SoulEaterDragonBaseStats;
 
     private void Start()
     {
         PlayerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
-        SoulEaterDragonBaseStats = GetComponent<BaseStats>(); 
+        SoulEaterDragonBaseStats = GetComponent<BaseStats>();
+        soulEaterDragonAudioController = GetComponent<AudioController>(); 
 
         if(Agent != null){
             Agent.updatePosition = false;
@@ -160,26 +161,14 @@ public class SoulEaterDragonStateMachine : StateMachine
         return playerDistanceSqr <= (PlayerChasingRange + 20) * (PlayerChasingRange + 20);
     }
 
-    public bool GetIsActionMusicStart()
-    {
-        return isActionMusicStart;
-    }
-
-    public void SetIsActionMusicStart(bool newValue)
-    {
-        isActionMusicStart = newValue;
-    }
-
     public void StartActionMusic() 
     {
         GetWarriorPlayerStateMachine().StopAmbientMusic();
-        SetIsActionMusicStart(true);
         GetWarriorPlayerStateMachine().StartActionMusic();
     }
     public void StartAmbientMusic()
     {
         GetWarriorPlayerStateMachine().StopActionMusic();
-        SetIsActionMusicStart(false);
         GetWarriorPlayerStateMachine().StartAmbientMusic();
     }
 
@@ -191,6 +180,11 @@ public class SoulEaterDragonStateMachine : StateMachine
     public void InstanciateSoulEaterDeathBody(){
         if(SoulEaterDeathBody == null){return;}
         Instantiate(SoulEaterDeathBody, transform.position, transform.rotation);
+    }
+
+    public void SetAudioControllerIsAttacking(bool newValue)
+    {
+        soulEaterDragonAudioController.SetIsMonsterAttacking(newValue);
     }
 
 //Unity animator event

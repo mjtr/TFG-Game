@@ -43,9 +43,8 @@ public class PlantMonsterStateMachine : StateMachine
     ThirdPersonWeaponConfig currentWeaponConfig;
     LazyValue<ThirdPersonWeapon> currentWeapon;
     
-    private bool isActionMusicStart = false;
-
     private BaseStats PlantMonsterBaseStats;
+    private AudioController plantMonsterAudioController;
 
     private void Awake() 
     {
@@ -67,6 +66,7 @@ public class PlantMonsterStateMachine : StateMachine
     {
         PlayerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
         PlantMonsterBaseStats = GetComponent<BaseStats>(); 
+        plantMonsterAudioController = GetComponent<AudioController>();
 
         if(Agent != null){
             Agent.updatePosition = false;
@@ -157,27 +157,20 @@ public class PlantMonsterStateMachine : StateMachine
         Destroy(gameObject, time);
     }
 
-    public bool GetIsActionMusicStart()
-    {
-        return isActionMusicStart;
-    }
-
-    public void SetIsActionMusicStart(bool newValue)
-    {
-        isActionMusicStart = newValue;
-    }
-
     public void StartActionMusic() 
     {
         GetWarriorPlayerStateMachine().StopAmbientMusic();
-        SetIsActionMusicStart(true);
-        GetWarriorPlayerStateMachine().StartActionMusic2();
+        GetWarriorPlayerStateMachine().StartActionMusic();
     }
     public void StartAmbientMusic()
     {
-        GetWarriorPlayerStateMachine().StopActionMusic2();
-        SetIsActionMusicStart(false);
+        GetWarriorPlayerStateMachine().StopActionMusic();
         GetWarriorPlayerStateMachine().StartAmbientMusic();
+    }
+
+    public void SetAudioControllerIsAttacking(bool newValue)
+    {
+        plantMonsterAudioController.SetIsMonsterAttacking(newValue);
     }
 
 //Unity animator event

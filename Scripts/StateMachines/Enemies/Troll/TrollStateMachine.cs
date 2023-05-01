@@ -38,14 +38,15 @@ public class TrollStateMachine : StateMachine
     public bool isDetectedPlayed = false;
 
     private bool firstTimeSeePlayer = true;
-    private bool isActionMusicStart = false;
 
     private BaseStats TrollBaseStats;
+    private AudioController trollAudioController;
 
     private void Start()
     {
         PlayerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
         TrollBaseStats = GetComponent<BaseStats>(); 
+        trollAudioController = GetComponent<AudioController>();
 
         if(Agent != null){
             Agent.updatePosition = false;
@@ -181,27 +182,20 @@ public class TrollStateMachine : StateMachine
         return playerDistanceSqr <= (PlayerChasingRange + 12) * (PlayerChasingRange + 12);
     }
 
-    public bool GetIsActionMusicStart()
-    {
-        return isActionMusicStart;
-    }
-
-    public void SetIsActionMusicStart(bool newValue)
-    {
-        isActionMusicStart = newValue;
-    }
-
     public void StartActionMusic() 
     {
         GetWarriorPlayerStateMachine().StopAmbientMusic();
-        SetIsActionMusicStart(true);
         GetWarriorPlayerStateMachine().StartActionMusic();
     }
     public void StartAmbientMusic()
     {
         GetWarriorPlayerStateMachine().StopActionMusic();
-        SetIsActionMusicStart(false);
         GetWarriorPlayerStateMachine().StartAmbientMusic();
+    }
+
+    public void SetAudioControllerIsAttacking(bool newValue)
+    {
+        trollAudioController.SetIsMonsterAttacking(newValue);
     }
 
 //Unity animator event

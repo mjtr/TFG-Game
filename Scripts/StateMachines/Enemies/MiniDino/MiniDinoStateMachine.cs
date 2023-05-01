@@ -39,14 +39,13 @@ public class MiniDinoStateMachine : StateMachine
     public bool isDetectedPlayed = false;
     
     private BaseStats MiniDinoBaseStats;
-
-    private bool isActionMusicStart = false;
+    private AudioController miniDinoAudioController;
 
     private void Start()
     {
         PlayerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
         MiniDinoBaseStats = GetComponent<BaseStats>(); 
-
+        miniDinoAudioController = gameObject.GetComponent<AudioController>();
         if(Agent != null){
             Agent.updatePosition = false;
             Agent.updateRotation = false;
@@ -141,27 +140,20 @@ public class MiniDinoStateMachine : StateMachine
         Destroy(gameObject, time);
     }
 
-    public bool GetIsActionMusicStart()
-    {
-        return isActionMusicStart;
-    }
-
-    public void SetIsActionMusicStart(bool newValue)
-    {
-        isActionMusicStart = newValue;
-    }
-
     public void StartActionMusic() 
     {
         GetWarriorPlayerStateMachine().StopAmbientMusic();
-        SetIsActionMusicStart(true);
         GetWarriorPlayerStateMachine().StartActionMusic();
     }
     public void StartAmbientMusic()
     {
         GetWarriorPlayerStateMachine().StopActionMusic();
-        SetIsActionMusicStart(false);
         GetWarriorPlayerStateMachine().StartAmbientMusic();
+    }
+
+    public void SetAudioControllerIsAttacking(bool newValue)
+    {
+        miniDinoAudioController.SetIsMonsterAttacking(newValue);
     }
 
 //Unity animator event

@@ -23,18 +23,17 @@ public class RockMonsterChasingState : RockMonsterBaseState
         stateMachine.StopParticlesEffects();
         stateMachine.DesactiveAllRockMonsterWeapon();
         stateMachine.StopSounds();
+
+        stateMachine.StartActionMusic();
+        stateMachine.SetAudioControllerIsAttacking(true);
         
         if(firsTimeToFollowCharater)
         {
             firsTimeToFollowCharater = false;
             chasingRangeToAdd = 1.5f;
         }
-
-        if(!stateMachine.GetIsActionMusicStart())
-        {
-            stateMachine.StartActionMusic();
-        }
-
+      
+        
         stateMachine.SetChasingRange(stateMachine.PlayerChasingRange + chasingRangeToAdd);
         stateMachine.Animator.CrossFadeInFixedTime(WalkHash, CrossFadeDuration);
         stateMachine.isDetectedPlayed = true;
@@ -59,10 +58,9 @@ public class RockMonsterChasingState : RockMonsterBaseState
 
         if(!IsInChaseRange())
         {
-            if(stateMachine.GetIsActionMusicStart())
-            {
-                stateMachine.StartAmbientMusic();
-            }
+            stateMachine.SetAudioControllerIsAttacking(false);
+            stateMachine.StartAmbientMusic();
+            
             stateMachine.isDetectedPlayed = false;
             stateMachine.SwitchState(new RockMonsterPatrolPathState(stateMachine));
             return;

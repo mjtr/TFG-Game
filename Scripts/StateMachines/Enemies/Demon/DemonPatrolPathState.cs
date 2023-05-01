@@ -20,8 +20,9 @@ public class DemonPatrolPathState : DemonBaseState
 
     public override void Enter()
     {
+        stateMachine.SetAudioControllerIsAttacking(false);
         player = GameObject.FindGameObjectWithTag("Player");
-        guardPosition = stateMachine.transform.position;    }
+        guardPosition = stateMachine.transform.position; }
 
     public override void Tick(float deltaTime)
     {
@@ -68,9 +69,7 @@ public class DemonPatrolPathState : DemonBaseState
         if(timeToResetNavMesh > 300)
         {
             timeToResetNavMesh = 0;
-            stateMachine.Agent.ResetPath();
-            stateMachine.Agent.enabled = false;
-            stateMachine.Agent.enabled = true;
+            stateMachine.ResetNavMesh();
         }
     }
 

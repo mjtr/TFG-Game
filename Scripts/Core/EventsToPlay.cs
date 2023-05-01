@@ -26,14 +26,8 @@ public class EventsToPlay : MonoBehaviour
     [SerializeField] public UnityEvent Shout;
     [SerializeField] public UnityEvent GetHit;
 
-    [SerializeField] public UnityEvent AmbientMusic;
-    [SerializeField] public UnityEvent StopAmbientMusic;
-
-    [SerializeField] public UnityEvent ActionMusic;
-    [SerializeField] public UnityEvent StopActionMusic;
-
-    [SerializeField] public UnityEvent ActionMusic2;
-    [SerializeField] public UnityEvent StopActionMusic2;
+    [SerializeField] public UnityEvent OnAttack2;
+    [SerializeField] public UnityEvent OnAttack3;
 
     [System.Serializable]
     public class TakeDamageEvent : UnityEvent<float>{ }

@@ -30,12 +30,9 @@ public class DemonChasingState : DemonBaseState
             firsTimeToFollowCharater = false;
             chasingRangeToAdd = 3.1f;
         }
-
-        if(!stateMachine.GetIsActionMusicStart())
-        {
-            stateMachine.StartActionMusic();
-        }
-
+       
+        stateMachine.StartActionMusic();
+        stateMachine.SetAudioControllerIsAttacking(true);
         stateMachine.SetChasingRange(stateMachine.PlayerChasingRange + chasingRangeToAdd);
         stateMachine.Animator.SetFloat(LocomotionHash, 1f);
         stateMachine.Animator.CrossFadeInFixedTime(LocomotionBlendTreeHash, CrossFadeDuration);
@@ -61,18 +58,16 @@ public class DemonChasingState : DemonBaseState
         }
 
         if(!IsInChaseRange())
-        {
-            if(stateMachine.GetIsActionMusicStart())
-            {
-                stateMachine.StartAmbientMusic();
-            }
+        { 
             stateMachine.isDetectedPlayed = false;
-
+            stateMachine.SetAudioControllerIsAttacking(false);
+            stateMachine.StartAmbientMusic();
             if(stateMachine.PatrolPath != null)
             {
                 stateMachine.SwitchState(new DemonPatrolPathState(stateMachine));
                 return;
             }
+            stateMachine.SwitchState(new DemonIdleState(stateMachine));
             return;
         
         }else if(isInAttackRange()){

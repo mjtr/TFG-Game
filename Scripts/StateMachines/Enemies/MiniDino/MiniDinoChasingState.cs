@@ -31,11 +31,8 @@ public class MiniDinoChasingState : MiniDinoBaseState
             chasingRangeToAdd = 3.1f;
         }
 
-        if(!stateMachine.GetIsActionMusicStart())
-        {
-            stateMachine.StartActionMusic();
-        }
-
+        stateMachine.StartActionMusic();
+        stateMachine.SetAudioControllerIsAttacking(true);
         stateMachine.SetChasingRange(stateMachine.PlayerChasingRange + chasingRangeToAdd);
         stateMachine.Animator.CrossFadeInFixedTime(WalkHash, CrossFadeDuration);
         stateMachine.isDetectedPlayed = true;
@@ -66,10 +63,8 @@ public class MiniDinoChasingState : MiniDinoBaseState
 
         if(!IsInChaseRange())
         {
-            if(stateMachine.GetIsActionMusicStart())
-            {
-                stateMachine.StartAmbientMusic();
-            }
+            stateMachine.SetAudioControllerIsAttacking(false);
+            stateMachine.StartAmbientMusic();
             stateMachine.isDetectedPlayed = false;
             //Vamos a hacer aquí que el dragon patrulle
             stateMachine.SwitchState(new MiniDinoPatrolPathState(stateMachine));

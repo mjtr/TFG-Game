@@ -38,15 +38,16 @@ public class VelociraptorStateMachine : StateMachine
     public bool isDetectedPlayed = false;
     private bool firstTimeSeePlayer = true;
     private BaseStats VelociraptorBaseStats;
-    private bool isActionMusicStart = false;
     private bool isWakingUp = false;
     private bool isFirstTimeToCallAllies = false;
     private bool hasHalfLife = false;
+    private AudioController velociraptorAudioController;
 
     private void Start()
     {
         PlayerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
         VelociraptorBaseStats = GetComponent<BaseStats>(); 
+        velociraptorAudioController = GetComponent<AudioController>();
 
         if(Agent != null){
             Agent.updatePosition = false;
@@ -221,27 +222,20 @@ public class VelociraptorStateMachine : StateMachine
         Destroy(gameObject, time);
     }
 
-    public bool GetIsActionMusicStart()
-    {
-        return isActionMusicStart;
-    }
-
-    public void SetIsActionMusicStart(bool newValue)
-    {
-        isActionMusicStart = newValue;
-    }
-
     public void StartActionMusic() 
     {
         GetWarriorPlayerStateMachine().StopAmbientMusic();
-        SetIsActionMusicStart(true);
         GetWarriorPlayerStateMachine().StartActionMusic();
     }
     public void StartAmbientMusic()
     {
         GetWarriorPlayerStateMachine().StopActionMusic();
-        SetIsActionMusicStart(false);
         GetWarriorPlayerStateMachine().StartAmbientMusic();
+    }
+
+    public void SetAudioControllerIsAttacking(bool newValue)
+    {
+        velociraptorAudioController.SetIsMonsterAttacking(newValue);
     }
 
     private bool IsPlayerNear()

@@ -18,11 +18,9 @@ public class PlantMonsterChasingState : PlantMonsterBaseState
 
     public override void Enter()
     {
-        if(!stateMachine.GetIsActionMusicStart())
-        {
-            stateMachine.StartActionMusic();
-        }
         
+        stateMachine.StartActionMusic();
+        stateMachine.SetAudioControllerIsAttacking(true);
         if(!stateMachine.isOnlySpellMagic){
             stateMachine.StopAllCourritines();
             stateMachine.StopParticlesEffects();
@@ -51,10 +49,8 @@ public class PlantMonsterChasingState : PlantMonsterBaseState
 
         if(!IsInChaseRange())
         {
-            if(stateMachine.GetIsActionMusicStart())
-            {
-                stateMachine.StartAmbientMusic();
-            }
+            stateMachine.SetAudioControllerIsAttacking(false);
+            stateMachine.StartAmbientMusic();
             stateMachine.SwitchState(new PlantMonsterShoutState(stateMachine));
             return;
         }
@@ -77,10 +73,10 @@ public class PlantMonsterChasingState : PlantMonsterBaseState
 
         stateMachine.Agent.velocity = stateMachine.Controller.velocity;
         timeToResetNavMesh ++;
-        if(timeToResetNavMesh > 300)
+        if(timeToResetNavMesh > 200)
         {
-            Debug.Log("Resetamos el navMesh de la planta");
             timeToResetNavMesh = 0;
+            stateMachine.Agent.enabled = true;
             stateMachine.Agent.ResetPath();
             stateMachine.Agent.enabled = false;
             stateMachine.Agent.enabled = true;

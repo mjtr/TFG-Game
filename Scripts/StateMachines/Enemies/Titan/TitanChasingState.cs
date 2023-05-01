@@ -29,10 +29,10 @@ public class TitanChasingState : TitanBaseState
             stateMachine.SetChasingRange(stateMachine.PlayerChasingRange + 3f);
         }
 
-        if(!stateMachine.GetIsActionMusicStart())
-        {
-            stateMachine.StartActionMusic();
-        }
+       
+        stateMachine.StartActionMusic();
+        stateMachine.SetAudioControllerIsAttacking(true);
+        
 
         stateMachine.Animator.SetFloat(LocomotionHash, 1f);
         stateMachine.Animator.CrossFadeInFixedTime(LocomotionBlendTreeHash, CrossFadeDuration);
@@ -46,10 +46,8 @@ public class TitanChasingState : TitanBaseState
 
         if(!IsInChaseRange())
         {
-            if(stateMachine.GetIsActionMusicStart())
-            {
-                stateMachine.StartAmbientMusic();
-            }
+            stateMachine.SetAudioControllerIsAttacking(false);
+            stateMachine.StartAmbientMusic();
             
             stateMachine.isDetectedPlayed = false;
             if(stateMachine.PatrolPath != null)
@@ -57,6 +55,7 @@ public class TitanChasingState : TitanBaseState
                 stateMachine.SwitchState(new TitanPatrolPathState(stateMachine));
                 return;
             }
+             stateMachine.SwitchState(new TitanIdleState(stateMachine));
             return;
         
         }else if(isInAttackRange()){
