@@ -26,7 +26,10 @@ namespace RPG.Stats
         CrabMonster,
         Rhino,
         DragonNightmare,
-        DragonTerror
+        DragonTerror,
+        Minotaur,
+        MedusaSerpentine,
+        MedusaHumanoid
         
 
     }

@@ -46,7 +46,7 @@ public class Health : MonoBehaviour
         this.IsInvulnerable = isInvulnerable;
     }
 
-    public void TakeDamage(GameObject instigator, float damage, bool isFromProyectile)
+    public void TakeDamage(GameObject instigator, float damage, bool isFromProyectile, bool produceHitsEffects)
     {
         if(healthPoints.value <= 0){ return; }
 
@@ -83,8 +83,10 @@ public class Health : MonoBehaviour
             }
 
             if(!IsInvulnerable && !isFromProyectile){
-                OnTakeDamageForInvokeImpactState?.Invoke(); //Para cambiar al impactState
-                eventsToPlay?.onTakeDamage.Invoke(damage);//Para el cambio de vida en las barras
+                if(produceHitsEffects){
+                    OnTakeDamageForInvokeImpactState?.Invoke(); //Para cambiar al impactState
+                    eventsToPlay?.onTakeDamage.Invoke(damage);//Para el cambio de vida en las barras
+                }
             }
         }
     }
@@ -156,6 +158,16 @@ public class Health : MonoBehaviour
     public float GetActualMaxStaminaPoints()
     {
         return baseStats.GetStat(Stat.Stamina);
+    }
+
+    public void RestoreHealthPoints(float healthPoints)
+    {
+        this.healthPoints.value = healthPoints; 
+    }
+
+    public void RestoreLevel(int newLevel)
+    {
+        this.baseStats.RestoreLevel(newLevel); 
     }
 
 }

@@ -25,7 +25,6 @@ public class Targeter : MonoBehaviour
     
     private void OnTriggerExit(Collider other){
        if (!other.TryGetComponent<Target>(out Target target)){return ;}
-       
         RemoveTarget(target);
     }
 
@@ -69,6 +68,10 @@ public class Targeter : MonoBehaviour
     }
 
     public void RemoveTarget(Target target){
+        if (target.gameObject.GetComponent<AudioController>() != null){
+            target.gameObject.GetComponent<AudioController>().SetIsMonsterAttacking(false);
+        }
+
         if(CurrentTarget == target){
             cineTargetGroup.RemoveMember(CurrentTarget.transform);
             CurrentTarget = null;
@@ -86,5 +89,10 @@ public class Targeter : MonoBehaviour
     {
         return targets;
     }
+
+    public void RestoreTargets(List<Target> newTargets)
+    {
+        this.targets = newTargets;
+    } 
 
 }

@@ -99,6 +99,14 @@ public class DragonStateMachine : StateMachine
         Gizmos.DrawWireSphere(transform.position, MinFireBreathAttackRange);
     }
 
+    public void ResetNavhMesh()
+    {
+        Agent.enabled = true;
+        Agent.ResetPath();
+        Agent.enabled = false;
+        Agent.enabled = true;
+    }
+
     public WarriorPlayerStateMachine GetWarriorPlayerStateMachine()
     {
        return GameObject.FindWithTag("Player").GetComponent<WarriorPlayerStateMachine>();

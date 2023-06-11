@@ -14,24 +14,10 @@ public class DragonImpactState : DragonBaseState
     public DragonImpactState(DragonStateMachine stateMachine) : base(stateMachine){  }
     public override void Enter()
     {
-       
         stateMachine.DesactiveAllDragonWeapon();
         stateMachine.StopAllCourritines();
-        if(MustProduceGetHitAnimation())
-        {
-            stateMachine.Animator.CrossFadeInFixedTime(ImpactHash, CrossFadeDuration);
-        }
+        stateMachine.Animator.CrossFadeInFixedTime(ImpactHash, CrossFadeDuration);
     }
-
-    private bool MustProduceGetHitAnimation()
-    {
-        int num = Random.Range(0,20);
-        if(num <= 14 ){
-            return false;
-        }     
-        return true;
-    }
-    
     public override void Tick(float deltaTime)
     {
         Move(deltaTime);
@@ -43,5 +29,7 @@ public class DragonImpactState : DragonBaseState
         }
     }
 
-    public override void Exit(){ }
+    public override void Exit(){ 
+        stateMachine.ResetNavhMesh();
+    }
 }

@@ -73,4 +73,10 @@ public class Stamina : MonoBehaviour
     {
         return staminaPoints.value / baseStats.GetStat(Stat.Stamina);
     }
+
+    public void RestoreStamina(float newStaminaPoints, float newStaminaRecover)
+    {
+        staminaPoints.value = newStaminaPoints;
+        staminaRecover = newStaminaRecover;
+    }
 }

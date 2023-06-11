@@ -84,7 +84,7 @@ public class TitanStateMachine : StateMachine
     private bool MustProduceGetHitAnimation()
     {
         int num = Random.Range(0,20);
-        if(num <= 6 ){
+        if(num <= 14){
             return false;
         }     
         return true;

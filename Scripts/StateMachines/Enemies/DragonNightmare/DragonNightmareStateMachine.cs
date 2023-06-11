@@ -83,7 +83,7 @@ public class DragonNightmareStateMachine : StateMachine
      private bool MustProduceGetHitAnimation()
     {
         int num = Random.Range(0,20);
-        if(num <= 16 ){
+        if(num <= 17 ){
             return false;
         }     
         return true;
@@ -155,6 +155,14 @@ public class DragonNightmareStateMachine : StateMachine
     public void DestroyCharacter(float time)
     {
         Destroy(gameObject, time);
+    }
+
+    public void ResetNavhMesh()
+    {
+        Agent.enabled = true;
+        Agent.ResetPath();
+        Agent.enabled = false;
+        Agent.enabled = true;
     }
 
     public void StartActionMusic() 

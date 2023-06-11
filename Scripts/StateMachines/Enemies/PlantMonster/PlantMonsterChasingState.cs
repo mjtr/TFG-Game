@@ -18,7 +18,7 @@ public class PlantMonsterChasingState : PlantMonsterBaseState
 
     public override void Enter()
     {
-        
+        stateMachine.Agent.enabled = true;
         stateMachine.StartActionMusic();
         stateMachine.SetAudioControllerIsAttacking(true);
         if(!stateMachine.isOnlySpellMagic){

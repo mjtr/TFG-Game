@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using RPG.Combat;
 using UnityEngine;
 
-[Serializable]
+
 public class WarriorPlayerGreatSwordMagicAttack : MonoBehaviour {
 
 	[SerializeField] private GameObject CastingEffect = null;

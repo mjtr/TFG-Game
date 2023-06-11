@@ -25,5 +25,7 @@ public class DragonNightmareImpactState : DragonNightmareBaseState
 
     public override void Tick(float deltaTime){ }
 
-    public override void Exit(){ }
+    public override void Exit(){ 
+        stateMachine.ResetNavhMesh();
+    }
 }

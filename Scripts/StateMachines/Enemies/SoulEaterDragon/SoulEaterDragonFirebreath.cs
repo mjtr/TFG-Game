@@ -1,36 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using RPG.Combat;
 using UnityEngine;
 
 public class SoulEaterDragonFirebreath : MonoBehaviour {
 
-	[SerializeField] private GameObject FireBreathEffect = null;
-    [SerializeField] private GameObject PlaceToPlayBreathEffect = null; 
-	[SerializeField] public GameObject FireBreathWeaponLogic = null;
+	[SerializeField] private GameObject FireBallEffect = null;
+    [SerializeField] private GameObject PlaceToPlayFireBallEffect = null; 
+    [SerializeField] private AudioSource MagicLaunchAudioSource = null; 
 
-	private GameObject effectInstantiate;
-	public void StartBreath(){
-		if(FireBreathEffect != null && PlaceToPlayBreathEffect != null)
+	public void FireBallMagicAudio(){
+		MagicLaunchAudioSource.Play();  
+	}
+	public void FireBallLaunchMagic(){
+		if(PlaceToPlayFireBallEffect != null && FireBallEffect != null)
         {
-            Transform copyEnemyTransform = PlaceToPlayBreathEffect.transform;
-            GameObject effect = Instantiate(FireBreathEffect, copyEnemyTransform);
-			effectInstantiate = effect;
+			GameObject newSpell = Instantiate (FireBallEffect, PlaceToPlayFireBallEffect.transform.position, PlaceToPlayFireBallEffect.transform.rotation);
+			Destroy(newSpell, 5f);
         }
 	}
-
-	public void EndBreath()
-	{
-		FireBreathWeaponLogic.SetActive(false);
-		if(effectInstantiate != null)
-		{
-			Destroy(effectInstantiate, 0.5f);
-		}
-		
-	}
 	
-	public void WEnableFireBreathWeaponLogic () 
-	{
-    	FireBreathWeaponLogic.SetActive(true);
-	}
 	
 }

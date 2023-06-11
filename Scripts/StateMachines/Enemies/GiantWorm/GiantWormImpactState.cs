@@ -15,6 +15,7 @@ public class GiantWormImpactState : GiantWormBaseState
     public override void Enter()
     {
         stateMachine.StopAllCoroutines();
+        stateMachine.DesactiveAllWormWeapon();
         stateMachine.StartCoroutine(WaitForAnimationToEnd(ImpactHash, CrossFadeDuration));        
     }
     

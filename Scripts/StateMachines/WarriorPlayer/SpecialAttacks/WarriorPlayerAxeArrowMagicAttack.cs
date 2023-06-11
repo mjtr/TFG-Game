@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using RPG.Combat;
 using UnityEngine;
 
-[Serializable]
 public class WarriorPlayerAxeArrowMagicAttack : MonoBehaviour {
 
 	[SerializeField] private GameObject CastingEffect = null;

@@ -18,13 +18,11 @@ public class WeaponsLogicToPlay : MonoBehaviour
     {
         if(weaponName.Contains("Axe"))
         {
-            Debug.Log("Devolvemos el logic del hacha");
             return AxeWeaponLogic;
         }
 
         if(weaponName.Contains("GREAT"))
         {
-            Debug.Log("Devolvemos el logic del greatSword");
             return GreatSwordWeaponLogic;
         }
             return SwordWeaponLogic;

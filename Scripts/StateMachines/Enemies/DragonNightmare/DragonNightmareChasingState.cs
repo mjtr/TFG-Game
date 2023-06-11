@@ -20,6 +20,7 @@ public class DragonNightmareChasingState : DragonNightmareBaseState
 
     public override void Enter()
     {
+        stateMachine.Agent.enabled = true;
         stateMachine.StopAllCourritines();
         stateMachine.StopParticlesEffects();
         stateMachine.DesactiveAllDragonNightmareWeapon();
@@ -76,17 +77,15 @@ public class DragonNightmareChasingState : DragonNightmareBaseState
         if(timeToResetNavMesh > 200)
         {
             timeToResetNavMesh = 0;
-            stateMachine.Agent.ResetPath();
-            stateMachine.Agent.enabled = false;
-            stateMachine.Agent.enabled = true;
+            stateMachine.ResetNavhMesh();
         }
     }
 
     public override void Exit()
     {
-        if(stateMachine.Agent != null && stateMachine.Agent.enabled)
+        if(stateMachine.Agent != null )
         {
-           stateMachine.Agent.ResetPath();
+           stateMachine.ResetNavhMesh();
            stateMachine.Agent.velocity = Vector3.zero;
         }
 

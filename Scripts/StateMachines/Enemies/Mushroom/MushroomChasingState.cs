@@ -23,6 +23,7 @@ public class MushroomChasingState : MushroomBaseState
 
     public override void Enter()
     {
+        stateMachine.Agent.enabled = true;
         stateMachine.SetAudioControllerIsAttacking(true);
         stateMachine.StartActionMusic();
         stateMachine.StopAllCourritines();

@@ -29,6 +29,8 @@ public class EventsToPlay : MonoBehaviour
     [SerializeField] public UnityEvent OnAttack2;
     [SerializeField] public UnityEvent OnAttack3;
 
+     [SerializeField] public UnityEvent takeFireAttack;
+
     [System.Serializable]
     public class TakeDamageEvent : UnityEvent<float>{ }
 }

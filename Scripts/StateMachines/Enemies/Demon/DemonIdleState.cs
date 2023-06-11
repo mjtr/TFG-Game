@@ -44,6 +44,7 @@ public class DemonIdleState : DemonBaseState
         if(IsInChaseRange() && (isInFrontOfPlayer() || stateMachine.isDetectedPlayed))
         {
             stateMachine.isDetectedPlayed = true;
+            stateMachine.ResetNavMesh();
             stateMachine.SwitchState(new DemonChasingState(stateMachine));
             return;
         }

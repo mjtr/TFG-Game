@@ -1,9 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using RPG.Stats;
-using UnityEngine;
-
 public class WarriorPlayerAttackingState : WarriorPlayerBaseState
 {
     private float previousFrameTime;
@@ -62,7 +56,7 @@ public class WarriorPlayerAttackingState : WarriorPlayerBaseState
 
     private void TryComboAttack(float normalizedTime)
     {
-        if(attack.ComboStateIndex == -1){ return;}
+        //if(attack.ComboStateIndex == -1){ return;}
         if(normalizedTime < attack.ComboAttackTime){return; }
         
         if(stateMachine.IsRighMouseClickButtonMainteinPressed()){

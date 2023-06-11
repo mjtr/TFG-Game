@@ -25,9 +25,11 @@ public class SoulEaterDragonStateMachine : StateMachine
     //Variables para el movimiento y el ataque
     [field: SerializeField] public float MovementSpeed{get; private set;} 
     [field: SerializeField] public float AttackRange{get; private set;} 
-    [field: SerializeField] public float FireBallAttackRange{get; private set;} 
     [field: SerializeField] public float PlayerChasingRange{get; private set;} 
     [field: SerializeField] public float AttackKnockback{get; private set;} 
+    [field: SerializeField] public float MaxMagicRange{get; private set;} 
+    [field: SerializeField] public float MinMagicRange{get; private set;} 
+
 
      //Variables para el patrullaje
     [field: SerializeField] public float ChaseDistance = 8f;
@@ -36,6 +38,7 @@ public class SoulEaterDragonStateMachine : StateMachine
     [field: SerializeField] public float WaypointDwellTime = 3f;
     [field: SerializeField] public float MaxSpeed = 5f;
     [field:SerializeField] public float PatrolSpeedFraction = 0.8f;
+    [field:SerializeField] public bool canThrowFireBall = true;
 
     public Health PlayerHealth {get; private set;} 
 
@@ -43,6 +46,9 @@ public class SoulEaterDragonStateMachine : StateMachine
     private AudioController soulEaterDragonAudioController;
 
     private BaseStats SoulEaterDragonBaseStats;
+    private bool isFlying = false;
+    private float timeToFly = 0;
+    private float timeToLand = 0;
 
     private void Start()
     {
@@ -76,13 +82,19 @@ public class SoulEaterDragonStateMachine : StateMachine
         GetWarriorPlayerEvents().WarriorOnAttack?.Invoke();
         PlayGetHitEffect();
         isDetectedPlayed = true;
-        if(MustProduceGetHitAnimation())
+        if(!GetIsFlying() && MustProduceGetHitAnimation())
         {
             SwitchState(new SoulEaterDragonImpactState(this));
         }
         
     }
+    public bool GetIsFlying(){
+        return this.isFlying;
+    }
 
+    public void SetIsFlying(bool newValue){
+        this.isFlying = newValue;
+    }
     private bool MustProduceGetHitAnimation()
     {
         int num = Random.Range(0,20);
@@ -103,12 +115,48 @@ public class SoulEaterDragonStateMachine : StateMachine
         Gizmos.DrawWireSphere(transform.position, PlayerChasingRange);
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, AttackRange);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, MaxMagicRange);
+        Gizmos.color = Color.grey;
+        Gizmos.DrawWireSphere(transform.position, MinMagicRange);
     }
 
     public WarriorPlayerStateMachine GetWarriorPlayerStateMachine()
     {
        return GameObject.FindWithTag("Player").GetComponent<WarriorPlayerStateMachine>();
     }
+
+    public float GetFlyTime(){
+        return timeToFly;
+    }
+
+    public void AddTimeToFlyTime(float time){
+        timeToFly += time;
+    }
+
+    public void ResetFlyTime(){
+        timeToFly = 0;
+    }
+
+    public float GetLandTime(){
+        return timeToLand;
+    }
+
+    public void AddTimeToLandTime(float time){
+        timeToLand += time;
+    }
+
+    public void ResetLandTime(){
+        timeToLand = 0;
+    }
+
+    public void ResetNavhMesh()
+    {
+        Agent.enabled = true;
+        Agent.ResetPath();
+        Agent.enabled = true;
+    }
+
 
     public EventsToPlay GetWarriorPlayerEvents()
     {

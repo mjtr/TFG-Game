@@ -1,10 +1,8 @@
-using System;
 using RPG.Combat;
 using RPG.Stats;
-using UnityEngine.AI;
 using UnityEngine;
 
-[Serializable]
+
 public class WarriorPlayerStateMachine : StateMachine
 {
     [field: SerializeField] public InputReader InputReader{get; private set;} 
@@ -49,6 +47,8 @@ public class WarriorPlayerStateMachine : StateMachine
     private bool canUseSpecialAttack = false;
     private bool isVelociraptorCallingAllies = false;
 
+    private bool canUseNewComboAttack = false;
+
     private int actionMusicSoundIndex;
     private int ambientSoundIndex;
     private bool isBossMusicSound;
@@ -72,12 +72,25 @@ public class WarriorPlayerStateMachine : StateMachine
         return weapon.Spawn(rightHandTransform, leftHandTransform, animator);
     }
 
+    public void RestoreWeapon(ThirdPersonWeaponConfig weapon)
+    {
+        DefaultWeapon = weapon;
+        currentWeaponConfig = DefaultWeapon;
+        currentWeapon = SetUpDefaultWeapon();
+    }
+
     public void EquipWeapon(ThirdPersonWeaponConfig weapon)
     {
         currentWeaponConfig = weapon;
         currentWeapon = AttachWeapon(weapon);
     }
     private void Start(){
+        if(ES3.KeyExists("FirstTimeToSaveInScene")){
+            Transform transformSaved = ES3.Load<Transform>("PlayerTransform");
+            gameObject.transform.SetPositionAndRotation(transformSaved.position, transformSaved.rotation);
+            gameObject.transform.localScale = transformSaved.localScale;
+            gameObject.transform.SetLocalPositionAndRotation(transformSaved.localPosition, transformSaved.localRotation);
+        }
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         actionMusicSoundIndex = -1;
@@ -107,6 +120,44 @@ public class WarriorPlayerStateMachine : StateMachine
     public void SetCanUseSpecialAttack()
     {
         canUseSpecialAttack = true;
+    }
+
+    public void RestoreSpecialAttack(bool newValue)
+    {
+        canUseSpecialAttack = newValue;
+    }
+
+    public bool GetCanUseSpecialAttack()
+    {
+        return canUseSpecialAttack;
+    }
+
+    public bool GetCanUseNewComboAttack()
+    {
+        return canUseNewComboAttack;
+    }
+
+
+    public void AddNewComboAttack(){
+        canUseNewComboAttack = true;
+        for (int i = 0; i < Attacks.Length; i++)
+        {
+            Attack attack = Attacks[i];
+            if(attack.isLastComboElement)
+            {
+                attack.SetComboStateIndex(3);
+            }
+        }
+
+        for (int i = 0; i < Attacks.Length; i++)
+        {
+            ShiftAttack shiftAttack = ShiftAttacks[i];
+            if(shiftAttack.isLastComboElement)
+            {
+                shiftAttack.SetComboStateIndex(3);
+            }
+        }
+
     }
 
     public void SetVelociraptorCallingAllies(bool newValue)
@@ -158,12 +209,15 @@ public class WarriorPlayerStateMachine : StateMachine
         bool existOtherEnemiesAtacking = false;
         foreach(var target in Targeter.GetPlayerTargets())
         {
-           AudioController audioController = target.GetComponent<AudioController>();
-           if(audioController != null)
-           {
-                existOtherEnemiesAtacking = audioController.GetIsMonsterAttacking();
-                if(existOtherEnemiesAtacking){return;}
-           }
+            if(target != null){
+                AudioController audioController = target.GetComponent<AudioController>();
+                if(audioController != null)
+                {
+                    existOtherEnemiesAtacking = audioController.GetIsMonsterAttacking();
+                    if(existOtherEnemiesAtacking){return;}
+                }
+            }
+           
         }
 
         AudioSource actionAudioSourceToStop = audioController.ActionMusics[actionMusicSoundIndex]; 
@@ -272,12 +326,10 @@ public class WarriorPlayerStateMachine : StateMachine
         if (Input.GetKey(KeyCode.Space))
         {
             float staminaConsumed = Health.GetActualMaxStaminaPoints() * 0.75f;
-
             return Stamina.CanStaminaPermitAction(staminaConsumed);
         }
         return false;
     }
-
 
     public void PlayGetHitEffect()
     {
@@ -296,6 +348,23 @@ public class WarriorPlayerStateMachine : StateMachine
     public void SetIsTwoHandsWeapon(bool newValue){
         this.isTwoHandsWeapon = newValue;
     }
+
+    public Transform GetRightHandTransform(){
+        return this.rightHandTransform;
+    }
+
+    public Transform GetLeftHandTransform(){
+        return this.leftHandTransform;
+    }
+    
+    public void RestoreHandsTransform(Transform rightHand, Transform leftHand){
+        this.rightHandTransform.transform.SetPositionAndRotation(rightHand.position, rightHand.rotation);
+        this.rightHandTransform.transform.localScale = rightHand.localScale;
+
+        this.leftHandTransform.transform.SetPositionAndRotation(leftHand.position, leftHand.rotation);
+        this.leftHandTransform.transform.localScale = leftHand.localScale;
+    }
+
 
     //Unity animator event
     private void WarriorRunningPlayMovementAudio1()

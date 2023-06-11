@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using RPG.Combat;
 using UnityEngine;
 
-[Serializable]
+
 public class WarriorPlayerSwordMagicAttack : MonoBehaviour {
 
 	[SerializeField] private GameObject CastingEffect = null;
@@ -45,7 +45,7 @@ public class WarriorPlayerSwordMagicAttack : MonoBehaviour {
         {
 			Transform copyEnemyTransform = PlaceToPlayLaunchEffect.transform;
             MagicSpiritInstantiate = Instantiate(LaunchEffect, copyEnemyTransform);
-			Destroy(MagicSpiritInstantiate, 1f);
+			Destroy(MagicSpiritInstantiate, 3f);
         }
 		
 		

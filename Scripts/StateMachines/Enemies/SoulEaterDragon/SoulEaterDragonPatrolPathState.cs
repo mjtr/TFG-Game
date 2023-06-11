@@ -53,7 +53,9 @@ public class SoulEaterDragonPatrolPathState : SoulEaterDragonBaseState
         UpdateTimers();
     }
 
-    public override void Exit() { }
+    public override void Exit() {
+        stateMachine.ResetNavhMesh();
+     }
 
     private void UpdateTimers()
     {
@@ -64,7 +66,7 @@ public class SoulEaterDragonPatrolPathState : SoulEaterDragonBaseState
      private void ResetNavMesh()
     {
         timeToResetNavMesh ++;
-        if(timeToResetNavMesh > 300)
+        if(timeToResetNavMesh > 250)
         {
             timeToResetNavMesh = 0;
             stateMachine.Agent.ResetPath();

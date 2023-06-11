@@ -18,6 +18,7 @@ public class VelociraptorChasingState : VelociraptorBaseState
 
     public override void Enter()
     {   
+        stateMachine.Agent.enabled = true;
         stateMachine.SetFirsTimeToSeePlayer();
         stateMachine.StopAllCourritines();
         stateMachine.StopParticlesEffects();
@@ -42,14 +43,14 @@ public class VelociraptorChasingState : VelociraptorBaseState
         
         if(stateMachine.PlayerHealth.CheckIsDead()){ return; }
 
-        if(!stateMachine.GetIsFirstTimeToCallAllies() && !stateMachine.GetHasHalfLife())
+        if(stateMachine.GetIsFirstTimeToCallAllies() && !stateMachine.GetHasHalfLife())
         {
             stateMachine.SetHasHalfLife(stateMachine.Health.GetHealthPoints() < (stateMachine.Health.GetMaxHealthPoints() / 2));
         }
 
-        if(!stateMachine.GetIsFirstTimeToCallAllies() && stateMachine.GetHasHalfLife())
+        if(stateMachine.GetIsFirstTimeToCallAllies() && stateMachine.GetHasHalfLife())
         {
-            stateMachine.SetIsFirstTimeToCallAllies(true);
+            stateMachine.SetIsFirstTimeToCallAllies(false);
             stateMachine.SwitchState(new VelociraptorCallingState(stateMachine));
             return;
         }

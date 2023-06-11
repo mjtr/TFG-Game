@@ -12,6 +12,7 @@ public class VelociraptorCallingState : VelociraptorBaseState
     public override void Enter()
     {
         stateMachine.GetWarriorPlayerStateMachine().SetVelociraptorCallingAllies(true);
+        stateMachine.SetIsCallingAllies(true);
         stateMachine.DesactiveAllVelociraptorWeapon();
         stateMachine.isDetectedPlayed = true;
         stateMachine.StartCoroutine(WaitForAnimationToEnd(Animator.StringToHash(callAnimation), CrossFadeDuration));
@@ -28,7 +29,8 @@ public class VelociraptorCallingState : VelociraptorBaseState
     { }
 
     public override void Exit(){ 
-       stateMachine.ResetNavhMesh();
-       stateMachine.GetWarriorPlayerStateMachine().SetVelociraptorCallingAllies(false);
+        stateMachine.SetIsCallingAllies(false);
+        stateMachine.ResetNavhMesh();
+        stateMachine.GetWarriorPlayerStateMachine().SetVelociraptorCallingAllies(false);
     }
 }

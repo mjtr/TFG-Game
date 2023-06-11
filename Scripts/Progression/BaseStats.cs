@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using GameDevTV.Utils;
 using UnityEngine;
 using UnityEngine.Events;
@@ -55,7 +53,16 @@ namespace RPG.Stats
                 currentLevel.value = newLevel;
                 LevelUpEffect();
                 OnLevelUp();
-                this.IncrementStaminaRecover(0.005f);
+                this.IncrementStaminaRecover(0.02f);
+
+                if(newLevel >= 10){
+                    WarriorPlayerStateMachine warriorPlayerStateMachine =  GameObject.FindWithTag("Player").GetComponent<WarriorPlayerStateMachine>();
+                    if(!warriorPlayerStateMachine.GetCanUseNewComboAttack()){
+                        warriorPlayerStateMachine.AddNewComboAttack();
+                        string controlsMessage = "¡Enhorabuena!, has desbloqueado un nuevo ataque para tu combo\n\nAhora en vez de tres ataques dispones de cuatro ataques diferentes\n\n";
+                        PixelCrushers.DialogueSystem.DialogueManager.ShowAlert(controlsMessage,5f);
+                    }
+                }
 
                 if(newLevel == 20)
                 {
@@ -80,7 +87,8 @@ namespace RPG.Stats
             Vector3 newPosition = copyCharacterTransform.position + new Vector3(0f, 1f, 0f);
             copyCharacterTransform.position = newPosition;
             levelUpSound?.Invoke();
-            Instantiate(levelUpParticleEffect, copyCharacterTransform);
+            GameObject LevelUpEffectsInstantiate = Instantiate(levelUpParticleEffect, copyCharacterTransform);
+            Destroy(LevelUpEffectsInstantiate, 1f);
         }
 
         public float GetStat(Stat stat)
@@ -96,6 +104,11 @@ namespace RPG.Stats
         public int GetLevel()
         {
             return currentLevel.value;
+        }
+
+        public void RestoreLevel(int newLevel)
+        {
+            currentLevel.value = newLevel;
         }
 
         public float GetAdditiveModifier(Stat stat)

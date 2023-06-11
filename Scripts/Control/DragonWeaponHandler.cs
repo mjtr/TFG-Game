@@ -10,15 +10,13 @@ public class DragonWeaponHandler : MonoBehaviour
     [SerializeField] public GameObject WeaponLogicFinishTail;
 
 //Unity Call
-    public void EnableWeapon()
+
+    public void EnableTailWeapon()
     {
-        WeaponLogicHead?.SetActive(true);
-        WeaponLogicBody?.SetActive(true);
         WeaponLogicTail?.SetActive(true);
         WeaponLogicFinishTail?.SetActive(true);
     }
-//Unity Call
-    public void DisableWeapon()
+    public void DisableAllWeapon()
     {
         WeaponLogicHead?.SetActive(false);
         WeaponLogicBody?.SetActive(false);
@@ -37,19 +35,6 @@ public class DragonWeaponHandler : MonoBehaviour
         WeaponLogicBody?.SetActive(true);
         WeaponLogicTail?.SetActive(true);
         WeaponLogicFinishTail?.SetActive(true);
-    }
-    
-     public void DisableHeadWeapon()
-    {
-        WeaponLogicHead?.SetActive(false);
-    }
-
-    public void DisableAllWeapon()
-    {
-        WeaponLogicHead?.SetActive(false);
-        WeaponLogicBody?.SetActive(false);
-        WeaponLogicTail?.SetActive(false);
-        WeaponLogicFinishTail?.SetActive(false);
     }
     
 }

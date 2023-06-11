@@ -37,7 +37,7 @@ public class ForceReceived : MonoBehaviour
             agent.enabled = true;
         }*/
         
-        if(agent != null && impact.sqrMagnitude < 0.2f * 0.2f)
+        if(agent != null && agent.enabled == true && impact.sqrMagnitude < 0.2f * 0.2f)
         {
             impact = Vector3.zero;
             agent.enabled = true;
@@ -64,4 +64,5 @@ public class ForceReceived : MonoBehaviour
         impact = Vector3.zero;
         verticalVelocity = 0f;
     }
+
 }

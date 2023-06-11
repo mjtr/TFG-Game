@@ -12,10 +12,20 @@ public class StartMenu : MonoBehaviour
    {
       if(firstTime){
          firstTime = false;
-         SceneManager.LoadScene("MainGame");
+         ES3.DeleteFile("SaveFile.es3");
+         SceneManager.LoadScene("Pantalla de carga");
       }
       
    }
+
+   public void LoadGame()
+   {
+      if(firstTime){
+         firstTime = false;
+         SceneManager.LoadScene("Pantalla de carga");
+      }
+   }
+
 
    public void QuitGame()
    {

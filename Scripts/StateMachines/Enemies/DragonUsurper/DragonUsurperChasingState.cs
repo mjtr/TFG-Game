@@ -20,6 +20,7 @@ public class DragonUsurperChasingState : DragonUsurperBaseState
 
     public override void Enter()
     {
+        stateMachine.Agent.enabled = true;
         stateMachine.StopAllCourritines();
         stateMachine.StopParticlesEffects();
         stateMachine.DesactiveAllDragonUsurperWeapon();
@@ -41,17 +42,24 @@ public class DragonUsurperChasingState : DragonUsurperBaseState
         
         if(stateMachine.PlayerHealth.CheckIsDead()){ return; }
 
-        if(stateMachine.GetWarriorPlayerStateMachine().isAttacking)
-        {
-            if(BlockAttackRandomize())
+        if(isInBasicAttackRange()){
+            stateMachine.isDetectedPlayed = true;
+
+            if(stateMachine.GetWarriorPlayerStateMachine().isAttacking)
             {
-                stateMachine.isDetectedPlayed = true;
-                
-                stateMachine.SwitchState(new DragonUsurperBlockState(stateMachine));
-                return;
-            }
+                if(BlockAttackRandomize())
+                {
+                    
+                    stateMachine.SwitchState(new DragonUsurperBlockState(stateMachine));
+                    return;
+                }
             
+            }
+
+            stateMachine.SwitchState(new DragonUsurperBasicAttackState(stateMachine));
+            return;
         }
+
 
         if(!IsInChaseRange())
         {
@@ -61,13 +69,7 @@ public class DragonUsurperChasingState : DragonUsurperBaseState
             stateMachine.SwitchState(new DragonUsurperPatrolPathState(stateMachine));
             return;
         
-        }
-        else if(isInBasicAttackRange()){
-            stateMachine.isDetectedPlayed = true;
-            stateMachine.SwitchState(new DragonUsurperBasicAttackState(stateMachine));
-            return;
-        }
-        else{
+        } else{
             
             bool isClawRange = isInClawAttackRange();
             bool isFireBreathRange = isInFireBreathAttackRange();
@@ -122,9 +124,7 @@ public class DragonUsurperChasingState : DragonUsurperBaseState
         if(timeToResetNavMesh > 200)
         {
             timeToResetNavMesh = 0;
-            stateMachine.Agent.ResetPath();
-            stateMachine.Agent.enabled = false;
-            stateMachine.Agent.enabled = true;
+            stateMachine.ResetNavhMesh();
         }
     }
 

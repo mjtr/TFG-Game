@@ -7,7 +7,6 @@ public class RhinoPatrolPathState : RhinoBaseState
 {
     GameObject player;
     Vector3 guardPosition;// La posición inicial la cual volverá después el enemigo una vez deja de seguirte
- //   DiabloMover mover;
     float timeSinceLastSawPlayer = 0f;
     float timeSinceArriveWaypoint = Mathf.Infinity;
     private int timeToResetNavMesh = 0;

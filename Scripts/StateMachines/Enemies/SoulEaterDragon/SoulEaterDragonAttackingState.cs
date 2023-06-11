@@ -19,7 +19,6 @@ public class SoulEaterDragonAttackingState : SoulEaterDragonBaseState
         stateMachine.StartCoroutine(WaitForAnimationToEnd(AttackHash, TransitionDuration));
     }
 
-
     private IEnumerator WaitForAnimationToEnd(int animationHash, float transitionDuration)
     {
         stateMachine.Animator.CrossFadeInFixedTime(animationHash, transitionDuration);
@@ -27,7 +26,9 @@ public class SoulEaterDragonAttackingState : SoulEaterDragonBaseState
         stateMachine.SwitchState(new SoulEaterDragonIdleState(stateMachine));
     }
 
-    public override void Tick(float deltaTime){ }
+    public override void Tick(float deltaTime){
+        stateMachine.AddTimeToFlyTime(deltaTime);
+    }
 
     public override void Exit(){ }
 

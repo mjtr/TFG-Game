@@ -18,6 +18,7 @@ public class RockMonsterChasingState : RockMonsterBaseState
 
     public override void Enter()
     {
+        stateMachine.Agent.enabled = true;
         float chasingRangeToAdd = 0f;
         stateMachine.StopAllCourritines();
         stateMachine.StopParticlesEffects();
@@ -30,7 +31,7 @@ public class RockMonsterChasingState : RockMonsterBaseState
         if(firsTimeToFollowCharater)
         {
             firsTimeToFollowCharater = false;
-            chasingRangeToAdd = 1.5f;
+            chasingRangeToAdd = 10f;
         }
       
         
@@ -44,18 +45,23 @@ public class RockMonsterChasingState : RockMonsterBaseState
         
         if(stateMachine.PlayerHealth.CheckIsDead()){ return; }
 
-        if(stateMachine.GetWarriorPlayerStateMachine().isAttacking)
-        {
-            if(BlockAttackRandomize())
+        if(isInAttackRange()){
+            stateMachine.isDetectedPlayed = true;
+
+            if(stateMachine.GetWarriorPlayerStateMachine().isAttacking)
             {
-                stateMachine.isDetectedPlayed = true;
-                
-                stateMachine.SwitchState(new RockMonsterBlockState(stateMachine));
-                return;
+                if(BlockAttackRandomize())
+                {
+                    
+                    stateMachine.SwitchState(new RockMonsterBlockState(stateMachine));
+                    return;
+                }
             }
-            
+            stateMachine.SwitchState(new RockMonsterAttackingState(stateMachine));
+            return;
         }
 
+        
         if(!IsInChaseRange())
         {
             stateMachine.SetAudioControllerIsAttacking(false);
@@ -65,11 +71,7 @@ public class RockMonsterChasingState : RockMonsterBaseState
             stateMachine.SwitchState(new RockMonsterPatrolPathState(stateMachine));
             return;
         
-        }else if(isInAttackRange()){
-            stateMachine.isDetectedPlayed = true;
-            stateMachine.SwitchState(new RockMonsterAttackingState(stateMachine));
-            return;
-        }
+        } 
 
         MoveToPlayer(deltaTime);
 

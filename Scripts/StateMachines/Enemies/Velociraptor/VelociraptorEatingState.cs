@@ -11,6 +11,8 @@ public class VelociraptorEatingState : VelociraptorBaseState
     public override void Enter()
     {
         int EatingHash = Animator.StringToHash(EatingAnimation);
+        float newSpeedValue = Random.Range(0.3f,1.3f);
+        stateMachine.Animator.SetFloat("Speed", newSpeedValue);
         stateMachine.SetFirsTimeToSeePlayer();
         stateMachine.DesactiveAllVelociraptorWeapon();
         stateMachine.Animator.CrossFadeInFixedTime(EatingHash, CrossFadeDuration);

@@ -14,6 +14,7 @@ public class SoulEaterDragonImpactState : SoulEaterDragonBaseState
     public SoulEaterDragonImpactState(SoulEaterDragonStateMachine stateMachine) : base(stateMachine){  }
     public override void Enter()
     {
+        stateMachine.ResetNavhMesh();
         stateMachine.StopAllCourritines();
         stateMachine.DesactiveAllSoulEaterDragonWeapon();
         stateMachine.Animator.CrossFadeInFixedTime(ImpactHash, CrossFadeDuration);
@@ -30,5 +31,7 @@ public class SoulEaterDragonImpactState : SoulEaterDragonBaseState
         }
     }
 
-    public override void Exit(){ }
+    public override void Exit(){
+        
+     }
 }

@@ -13,6 +13,8 @@ public class RhinoEatingState : RhinoBaseState
         int EatingHash = Animator.StringToHash(EatingAnimation);
         stateMachine.SetFirsTimeToSeePlayer();
         stateMachine.DesactiveAllRhinoWeapon();
+        float newSpeedValue = Random.Range(0.3f,1.3f);
+        stateMachine.Animator.SetFloat("Speed", newSpeedValue);
         stateMachine.Animator.CrossFadeInFixedTime(EatingHash, CrossFadeDuration);
     }
 

@@ -19,6 +19,7 @@ public class CrabMonsterChasingState : CrabMonsterBaseState
 
     public override void Enter()
     {   
+        stateMachine.Agent.enabled = true;
         stateMachine.SetFirsTimeToSeePlayer();
         stateMachine.StopAllCourritines();
         stateMachine.StopParticlesEffects();
@@ -27,7 +28,7 @@ public class CrabMonsterChasingState : CrabMonsterBaseState
         if(firsTimeToFollowCharater)
         {
             firsTimeToFollowCharater = false;
-            stateMachine.SetChasingRange(stateMachine.PlayerChasingRange + 60f);
+            stateMachine.SetChasingRange(stateMachine.PlayerChasingRange + 160f);
         }
 
         if(stateMachine.GetFirstTimeToPlayEpicMusic())

@@ -11,7 +11,6 @@ public class DemonChasingState : DemonBaseState
     private readonly int LocomotionHash = Animator.StringToHash("locomotion");
     private const float CrossFadeDuration = 0.1f;
     private int timeToResetNavMesh = 0;
-    private bool firsTimeToFollowCharater = true;
     private bool blockBefore = false;
 
     public DemonChasingState(DemonStateMachine stateMachine) : base(stateMachine)
@@ -20,17 +19,11 @@ public class DemonChasingState : DemonBaseState
 
     public override void Enter()
     {
+        stateMachine.Agent.enabled = true;
         float chasingRangeToAdd = 0f;
         stateMachine.StopAllCourritines();
         stateMachine.StopParticlesEffects();
         stateMachine.DesactiveAllDemonWeapon();
-        
-        if(firsTimeToFollowCharater)
-        {
-            firsTimeToFollowCharater = false;
-            chasingRangeToAdd = 3.1f;
-        }
-       
         stateMachine.StartActionMusic();
         stateMachine.SetAudioControllerIsAttacking(true);
         stateMachine.SetChasingRange(stateMachine.PlayerChasingRange + chasingRangeToAdd);
@@ -44,19 +37,25 @@ public class DemonChasingState : DemonBaseState
         
         if(stateMachine.PlayerHealth.CheckIsDead()){ return; }
 
-        if(stateMachine.GetWarriorPlayerStateMachine().isAttacking)
-        {
-            if(BlockAttackRandomize(blockBefore))
+        if(isInAttackRange()){
+            stateMachine.isDetectedPlayed = true;
+
+            if(stateMachine.GetWarriorPlayerStateMachine().isAttacking)
             {
-                blockBefore = true;
-                stateMachine.isDetectedPlayed = true;
-                stateMachine.SwitchState(new DemonBlockState(stateMachine));
-                return;
+                if(BlockAttackRandomize(blockBefore))
+                {
+                    blockBefore = true;
+                    stateMachine.SwitchState(new DemonBlockState(stateMachine));
+                    return;
+                }
+                blockBefore = false;
+                
             }
-            blockBefore = false;
-            
+            stateMachine.SwitchState(new DemonAttackingState(stateMachine));
+            return;
         }
 
+    
         if(!IsInChaseRange())
         { 
             stateMachine.isDetectedPlayed = false;
@@ -70,11 +69,7 @@ public class DemonChasingState : DemonBaseState
             stateMachine.SwitchState(new DemonIdleState(stateMachine));
             return;
         
-        }else if(isInAttackRange()){
-            stateMachine.isDetectedPlayed = true;
-            stateMachine.SwitchState(new DemonAttackingState(stateMachine));
-            return;
-        }
+        } 
 
         MoveToPlayer(deltaTime);
 
@@ -92,10 +87,13 @@ public class DemonChasingState : DemonBaseState
 
         stateMachine.Agent.velocity = stateMachine.Controller.velocity;
         timeToResetNavMesh ++;
-        if(timeToResetNavMesh > 300)
+        if(timeToResetNavMesh > 200)
         {
             timeToResetNavMesh = 0;
-            stateMachine.ResetNavMesh();
+            stateMachine.Agent.enabled = true;
+            stateMachine.Agent.ResetPath();
+            stateMachine.Agent.enabled = false;
+            stateMachine.Agent.enabled = true;
         }
     }
 

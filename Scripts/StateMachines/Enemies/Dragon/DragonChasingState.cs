@@ -23,6 +23,7 @@ public class DragonChasingState : DragonBaseState
 
     public override void Enter()
     {
+        stateMachine.Agent.enabled = true;
         stateMachine.isDetectedPlayed = true;
         stateMachine.StopAllCourritines();
         stateMachine.StopParticlesEffects();
@@ -74,10 +75,7 @@ public class DragonChasingState : DragonBaseState
         if(timeToResetNavMesh > 200)
         {
             timeToResetNavMesh = 0;
-            stateMachine.Agent.enabled = true;
-            stateMachine.Agent.ResetPath();
-            stateMachine.Agent.enabled = false;
-            stateMachine.Agent.enabled = true;
+            stateMachine.ResetNavhMesh();
         }
     }
 

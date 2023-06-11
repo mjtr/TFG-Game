@@ -74,7 +74,23 @@ public class DevilStateMachine : StateMachine
 
     private void HandleTakeDamage()
     {
-        SwitchState(new DevilImpactState(this));
+        SetFirsTimeToSeePlayer();
+        GetWarriorPlayerEvents().WarriorOnAttack?.Invoke();
+        PlayGetHitEffect();
+        isDetectedPlayed = true;
+        if(MustProduceGetHitAnimation())
+        {
+            SwitchState(new DevilImpactState(this));
+        }
+    }
+
+    private bool MustProduceGetHitAnimation()
+    {
+        int num = Random.Range(0,20);
+        if(num <= 6 ){
+            return false;
+        }     
+        return true;
     }
 
      private void HandleDie()

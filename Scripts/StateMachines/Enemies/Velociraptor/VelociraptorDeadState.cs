@@ -22,6 +22,7 @@ public class VelociraptorDeadState : VelociraptorBaseState
         stateMachine.StartAmbientMusic();
         stateMachine.gameObject.GetComponent<CharacterController>().enabled = false;
         GameObject.Destroy(stateMachine.Target);
+        stateMachine.DestroyCharacter(40f);
     }
 
     private void GetRandomVelociraptorDeath()

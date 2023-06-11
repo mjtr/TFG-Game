@@ -31,7 +31,7 @@ public class WeaponDamage : MonoBehaviour
 
         if(other.TryGetComponent<Health>(out Health health))
         {
-            health.TakeDamage(myCollider.gameObject, damage, false);
+            health.TakeDamage(myCollider.gameObject, damage, false, true);
         }
 
         if(other.TryGetComponent<ForceReceived>( out ForceReceived forceReceived))

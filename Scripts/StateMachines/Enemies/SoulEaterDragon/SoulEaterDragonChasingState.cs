@@ -23,6 +23,7 @@ public class SoulEaterDragonChasingState : SoulEaterDragonBaseState
 
     public override void Enter()
     {
+        stateMachine.Agent.enabled = true;
         stateMachine.StopAllCourritines();
         stateMachine.StopParticlesEffects();
         stateMachine.DesactiveAllSoulEaterDragonWeapon();
@@ -37,20 +38,40 @@ public class SoulEaterDragonChasingState : SoulEaterDragonBaseState
 
     public override void Tick(float deltaTime)
     {
-        
-        if(stateMachine.PlayerHealth.CheckIsDead()){ return; }
+        stateMachine.AddTimeToFlyTime(deltaTime);        
 
-        if(stateMachine.GetWarriorPlayerStateMachine().isAttacking)
-        {
-            if(BlockAttackRandomize())
-            {
-                stateMachine.isDetectedPlayed = true;
-                stateMachine.SwitchState(new SoulEaterDragonStartBlockingState(stateMachine));
-                return;
-            }
-            
+        if(stateMachine.PlayerHealth.CheckIsDead()){ return; }
+        
+        if(stateMachine.GetFlyTime() > 10f){
+            stateMachine.ResetFlyTime();
+            stateMachine.SwitchState(new SoulEaterDragonStartFlyingState(stateMachine));
+            return;
         }
 
+        if(isInAttackRange())
+        {
+            if(stateMachine.GetWarriorPlayerStateMachine().isAttacking)
+            {
+                stateMachine.isDetectedPlayed = true;
+
+                if(BlockAttackRandomize())
+                {
+                    stateMachine.SwitchState(new SoulEaterDragonStartBlockingState(stateMachine));
+                    return;
+                }
+            }
+
+            stateMachine.SwitchState(new SoulEaterDragonAttackingState(stateMachine));
+            return;
+        }  
+
+        if(stateMachine.canThrowFireBall && isInMagicRange())
+        {
+            stateMachine.SwitchState(new SoulEaterDragonFireBreathState(stateMachine));
+            return;
+        }
+
+        
         if(!IsInChaseRange())
         {
             stateMachine.SetAudioControllerIsAttacking(false);
@@ -65,10 +86,6 @@ public class SoulEaterDragonChasingState : SoulEaterDragonBaseState
             stateMachine.SwitchState(new SoulEaterDragonIdleState(stateMachine));
             return;
         
-        }else if(isInAttackRange()){
-            stateMachine.isDetectedPlayed = true;
-            stateMachine.SwitchState(new SoulEaterDragonAttackingState(stateMachine));
-            return;
         }
 
         MoveToPlayer(deltaTime);
@@ -91,9 +108,7 @@ public class SoulEaterDragonChasingState : SoulEaterDragonBaseState
         {
             Debug.Log("Resetamos el navMesh del SoulEaterDragon");
             timeToResetNavMesh = 0;
-            stateMachine.Agent.ResetPath();
-            stateMachine.Agent.enabled = false;
-            stateMachine.Agent.enabled = true;
+            stateMachine.ResetNavhMesh();
         }
     }
 
@@ -115,13 +130,15 @@ public class SoulEaterDragonChasingState : SoulEaterDragonBaseState
         return playerDistanceSqr <= stateMachine.AttackRange * stateMachine.AttackRange;
     }
 
-    private bool isInFireBreathAttackRange()
+    private bool isInMagicRange()
     {
         if(stateMachine.PlayerHealth.CheckIsDead()){return false;}
 
         float playerDistanceSqr = (stateMachine.PlayerHealth.transform.position - stateMachine.transform.position).sqrMagnitude;
    
-        return playerDistanceSqr <= stateMachine.FireBallAttackRange * stateMachine.FireBallAttackRange;
+        return playerDistanceSqr <= stateMachine.MaxMagicRange * stateMachine.MaxMagicRange
+            && playerDistanceSqr >= stateMachine.MinMagicRange * stateMachine.MinMagicRange;
     }
+
 
 }

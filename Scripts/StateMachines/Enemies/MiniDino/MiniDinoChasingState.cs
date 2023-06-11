@@ -20,6 +20,7 @@ public class MiniDinoChasingState : MiniDinoBaseState
 
     public override void Enter()
     {
+        stateMachine.Agent.enabled = true;
         float chasingRangeToAdd = 0f;
         stateMachine.StopAllCourritines();
         stateMachine.StopParticlesEffects();
@@ -43,38 +44,39 @@ public class MiniDinoChasingState : MiniDinoBaseState
         
         if(stateMachine.PlayerHealth.CheckIsDead()){ return; }
 
-        if(stateMachine.GetWarriorPlayerStateMachine().isAttacking)
-        {
-            if(BlockAttackRandomize())
+        if(isInAttackRange()){
+            stateMachine.isDetectedPlayed = true;
+
+            if(stateMachine.GetWarriorPlayerStateMachine().isAttacking)
             {
-                if(blockingNumber < 2)
+                if(BlockAttackRandomize())
                 {
-                    blockingNumber ++;
-                    stateMachine.isDetectedPlayed = true;
-                    stateMachine.SwitchState(new MiniDinoBlockState(stateMachine));
-                    return;
-                }else{
-                    blockingNumber = 0;
+                    if(blockingNumber < 2)
+                    {
+                        blockingNumber ++;
+                        stateMachine.SwitchState(new MiniDinoBlockState(stateMachine));
+                        return;
+                    }else{
+                        blockingNumber = 0;
+                    }
+                
                 }
-              
             }
-            
+
+            stateMachine.SwitchState(new MiniDinoAttackingState(stateMachine));
+            return;
         }
+        
 
         if(!IsInChaseRange())
         {
             stateMachine.SetAudioControllerIsAttacking(false);
             stateMachine.StartAmbientMusic();
             stateMachine.isDetectedPlayed = false;
-            //Vamos a hacer aquí que el dragon patrulle
             stateMachine.SwitchState(new MiniDinoPatrolPathState(stateMachine));
             return;
         
-        }else if(isInAttackRange()){
-            stateMachine.isDetectedPlayed = true;
-            stateMachine.SwitchState(new MiniDinoAttackingState(stateMachine));
-            return;
-        }
+        } 
 
         MoveToPlayer(deltaTime);
 
@@ -96,6 +98,7 @@ public class MiniDinoChasingState : MiniDinoBaseState
         {
             Debug.Log("Resetamos el navMesh del MiniDino");
             timeToResetNavMesh = 0;
+            stateMachine.Agent.enabled = true;
             stateMachine.Agent.ResetPath();
             stateMachine.Agent.enabled = false;
             stateMachine.Agent.enabled = true;

@@ -4,18 +4,15 @@ using UnityEngine;
 
 public class DemonAttackingState : DemonBaseState
 {
-    private const float TransitionDuration = 0.1f;
+    private const float TransitionDuration = 0.2f;
     private string attackChoosed;
     public DemonAttackingState(DemonStateMachine stateMachine) : base(stateMachine)    {   }
     private bool tryCombo = false;
     private int countCombo = 0;
-
     private float timeToWaitEndAnimation;
 
     public override void Enter()
     {   
-        stateMachine.StopAllCourritines();
-        stateMachine.DesactiveAllDemonWeapon();
         attackChoosed = GetRandomDemonAttack();
         tryCombo = GetRandomTryCombo();
         int AttackHash = Animator.StringToHash(attackChoosed);
@@ -24,19 +21,43 @@ public class DemonAttackingState : DemonBaseState
     }
 
     private IEnumerator WaitForAnimationToEnd(int animationHash, float transitionDuration)
-    {
+    {   
+        bool attackFastter = AttackFastter();
+
+        if(attackFastter){
+            stateMachine.Animator.SetFloat("Speed", 1.25f);
+            timeToWaitEndAnimation = timeToWaitEndAnimation / 1.25f;
+        }
+
         stateMachine.Animator.CrossFadeInFixedTime(animationHash, transitionDuration);
+
         yield return new WaitForSeconds(timeToWaitEndAnimation);
+
+        if(attackFastter){
+            stateMachine.Animator.SetFloat("Speed", 1.0f);
+        }
+        
+
         if(tryCombo)
         {
             tryCombo = GetRandomTryCombo();
             FacePlayer();
-            stateMachine.StartCoroutine(WaitForAnimationToEnd(Animator.StringToHash(GetRandomDemonAttackCombo(attackChoosed)), TransitionDuration));
+            attackChoosed = GetRandomDemonAttackCombo(attackChoosed);
+            stateMachine.StartCoroutine(WaitForAnimationToEnd(Animator.StringToHash(attackChoosed), TransitionDuration));
         }else
         {
-            stateMachine.SwitchState(new DemonIdleState(stateMachine));
+            stateMachine.SwitchState(new DemonChasingState(stateMachine));
         }
         
+    }
+
+    private bool AttackFastter()
+    {
+        int num = Random.Range(0,20);
+        if(num <= 7 ){
+            return true;
+        }
+        return false;
     }
 
     private bool GetRandomTryCombo()
@@ -57,7 +78,9 @@ public class DemonAttackingState : DemonBaseState
 
     public override void Tick(float deltaTime){ }
 
-    public override void Exit(){ }
+    public override void Exit(){ 
+        stateMachine.ResetNavMesh();
+    }
 
     private string GetRandomDemonAttack()
     {

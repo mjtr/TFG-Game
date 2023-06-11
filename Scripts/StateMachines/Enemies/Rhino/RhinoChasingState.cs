@@ -19,6 +19,7 @@ public class RhinoChasingState : RhinoBaseState
 
     public override void Enter()
     {
+        stateMachine.Agent.enabled = true;
         stateMachine.StartActionMusic();
         stateMachine.SetAudioControllerIsAttacking(true);
         stateMachine.StopAllCourritines();

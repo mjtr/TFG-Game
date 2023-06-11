@@ -39,8 +39,11 @@ public class VelociraptorStateMachine : StateMachine
     private bool firstTimeSeePlayer = true;
     private BaseStats VelociraptorBaseStats;
     private bool isWakingUp = false;
-    private bool isFirstTimeToCallAllies = false;
+    private bool isFirstTimeToCallAllies = true;
     private bool hasHalfLife = false;
+
+    private bool isCallingAllies = false;
+
     private AudioController velociraptorAudioController;
 
     private void Start()
@@ -92,7 +95,7 @@ public class VelociraptorStateMachine : StateMachine
         GetWarriorPlayerEvents().WarriorOnAttack?.Invoke();
         PlayGetHitEffect();
         isDetectedPlayed = true;
-        if(!isSleeping && !GetWakeUp() && MustProduceGetHitAnimation())
+        if(!isCallingAllies && !isSleeping && !GetWakeUp() && MustProduceGetHitAnimation())
         {
             SwitchState(new VelociraptorImpactState(this));
         }
@@ -134,6 +137,11 @@ public class VelociraptorStateMachine : StateMachine
     public bool GetWakeUp()
     {
         return isWakingUp;
+    }
+
+    public void SetIsCallingAllies(bool newValue)
+    {
+        isCallingAllies = newValue;
     }
 
     public void SetIsFirstTimeToCallAllies(bool newValue)

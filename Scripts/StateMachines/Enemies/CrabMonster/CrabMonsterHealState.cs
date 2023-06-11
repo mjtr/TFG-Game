@@ -32,7 +32,7 @@ public class CrabMonsterHealState : CrabMonsterBaseState
 
     public override void Tick(float deltaTime)
     {
-        stateMachine.Health.Heal(10f);
+        stateMachine.Health.Heal(25f);
 
     }
 

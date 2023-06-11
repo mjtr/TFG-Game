@@ -11,6 +11,8 @@ public class MiniDinoContinueEating : MiniDinoBaseState
 
     public override void Enter()
     {   
+        float newSpeedValue = Random.Range(0.3f,1.3f);
+        stateMachine.Animator.SetFloat("Speed", newSpeedValue);
         int continueEatingHash = Animator.StringToHash("Eat_loop");
         stateMachine.Animator.CrossFadeInFixedTime(continueEatingHash, TransitionDuration);
     }

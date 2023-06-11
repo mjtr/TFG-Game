@@ -5,7 +5,6 @@ public class VelociraptorSleepState : VelociraptorBaseState
 {
     private string sleepAnimation = "SleepLoop";
     private const float CrossFadeDuration = 0.1f;
-    private float timeToWaitEndAnimation = 2.8f;
     public VelociraptorSleepState(VelociraptorStateMachine stateMachine) : base(stateMachine)
     { }
 
@@ -14,6 +13,8 @@ public class VelociraptorSleepState : VelociraptorBaseState
         int SleepHash = Animator.StringToHash(sleepAnimation);
         stateMachine.SetFirsTimeToSeePlayer();
         stateMachine.DesactiveAllVelociraptorWeapon();
+        float newSpeedValue = Random.Range(0.2f,1.3f);
+        stateMachine.Animator.SetFloat("Speed", newSpeedValue);
         stateMachine.Animator.CrossFadeInFixedTime(SleepHash, CrossFadeDuration);
     }
 

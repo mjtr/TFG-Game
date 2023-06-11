@@ -69,7 +69,7 @@ public abstract class DemonBaseState : State
     protected bool isInFrontOfPlayer()
     {
         if(stateMachine.PlayerHealth == null){ return false; }
-        float dotThreshold = 0.75f;
+        float dotThreshold = 0.65f;
         Vector3 enemyDirection = stateMachine.transform.forward;
 
         // Calcular la dirección hacia el personaje principal

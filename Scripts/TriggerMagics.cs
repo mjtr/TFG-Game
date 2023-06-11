@@ -12,7 +12,7 @@ public class TriggerMagics : MonoBehaviour
         {
             WarriorPlayerStateMachine warriorStateMachine = GameObject.FindWithTag("Player").GetComponent<WarriorPlayerStateMachine>();
             warriorStateMachine.EventsToPlay.WarriorOnPosionEffect?.Invoke();
-            warriorStateMachine.Health.TakeDamage(this.gameObject,posionDamage,false);
+            warriorStateMachine.Health.TakeDamage(this.gameObject,posionDamage,false, false);
         }
     }
 }

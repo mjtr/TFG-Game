@@ -14,6 +14,7 @@ public class TrollChasingState : TrollBaseState
 
     public override void Enter()
     {   
+        stateMachine.Agent.enabled = true;
         stateMachine.SetFirsTimeToSeePlayer();
         float chasingRangeToAdd = 0f;
         stateMachine.StopAllCourritines();
@@ -49,7 +50,9 @@ public class TrollChasingState : TrollBaseState
             stateMachine.SwitchState(new TrollPatrolPathState(stateMachine));
             return;
         
-        }else if(isInAttackRange()){
+        }
+        
+        if(isInAttackRange()){
             stateMachine.isDetectedPlayed = true;
             stateMachine.SwitchState(new TrollAttackingState(stateMachine));
             return;

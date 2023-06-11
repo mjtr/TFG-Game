@@ -5,7 +5,6 @@ using UnityEngine;
 public class DevilAttackingState : DevilBaseState
 {
     private const float TransitionDuration = 0.1f;
-
     private string attackChoosed;
     public DevilAttackingState(DevilStateMachine stateMachine) : base(stateMachine)    {   }
 

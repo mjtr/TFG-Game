@@ -106,6 +106,7 @@ namespace RPG.Combat
 
                 GameObject weHit = other.gameObject;
                 if (weHit.name == "SecondEnviroment" || weHit.name == "Enviroment" || weHit.name == "SecondTerrain"){
+                    Debug.Log("Colisionamos con el terreno");
                     StartExplosionEffect();
                     return;
                 }
@@ -124,7 +125,7 @@ namespace RPG.Combat
             }
             else
             {
-                HealthTarget.TakeDamage(instigator,proyectileDamage, true);
+                HealthTarget.TakeDamage(instigator,proyectileDamage, true, true);
             }
 
 

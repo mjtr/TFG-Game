@@ -25,4 +25,10 @@ public class Attack
 
 [field: SerializeField] public float staminaTaked{get; private set;}
 
+[field: SerializeField] public bool isLastComboElement{get; private set;}
+
+public void SetComboStateIndex(int newIndex){
+    ComboStateIndex = newIndex;
+}
+
 }

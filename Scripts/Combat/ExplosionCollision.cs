@@ -8,6 +8,22 @@ public class ExplosionCollision : MonoBehaviour
     [SerializeField] AudioSource explosionSound;
     [SerializeField] float explosionDamage = 300f;
     [SerializeField] public bool isFromPlayer = false;
+    [SerializeField] public Collider colliderToActivate;
+    public float activationDelay = 1f;
+
+    private void Start()
+    {
+        if(colliderToActivate != null){
+            StartCoroutine(ActivateColliderAfterDelay());
+        }
+        
+    }
+
+    private IEnumerator ActivateColliderAfterDelay()
+    {
+        yield return new WaitForSeconds(activationDelay);
+        colliderToActivate.isTrigger = true;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -25,7 +41,7 @@ public class ExplosionCollision : MonoBehaviour
             if(explosionSound != null){
                 explosionSound.Play();
             }
-            EnemyHealth.TakeDamage(player,explosionDamage, true);
+            EnemyHealth.TakeDamage(player,explosionDamage, true, true);
         }else
         {
             Health playerHealth = player.GetComponent<Health>();
@@ -35,7 +51,7 @@ public class ExplosionCollision : MonoBehaviour
                 explosionSound.Play();
             }
             
-            playerHealth.TakeDamage(gameObject ,explosionDamage, true);
+            playerHealth.TakeDamage(gameObject ,explosionDamage, true, true);
         }   
         
     }

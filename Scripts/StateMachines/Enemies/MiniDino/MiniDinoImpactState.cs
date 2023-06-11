@@ -54,5 +54,10 @@ public class MiniDinoImpactState : MiniDinoBaseState
         }
     }
 
-    public override void Exit(){ }
+    public override void Exit(){
+        stateMachine.Agent.enabled = true;
+        stateMachine.Agent.ResetPath();
+        stateMachine.Agent.enabled = false;
+        stateMachine.Agent.enabled = true;
+    }
 }

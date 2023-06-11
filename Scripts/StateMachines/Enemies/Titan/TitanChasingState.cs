@@ -18,6 +18,7 @@ public class TitanChasingState : TitanBaseState
 
     public override void Enter()
     {   
+        stateMachine.Agent.enabled = true;
         stateMachine.SetFirsTimeToSeePlayer();
         stateMachine.StopAllCourritines();
         stateMachine.StopParticlesEffects();

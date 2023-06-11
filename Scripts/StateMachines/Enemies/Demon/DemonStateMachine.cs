@@ -73,7 +73,6 @@ public class DemonStateMachine : StateMachine
 
     private void HandleTakeDamage()
     {
-        DesactiveAllDemonWeapon();
         GetWarriorPlayerEvents().WarriorOnAttack?.Invoke();
         PlayGetHitEffect();
         isDetectedPlayed = true;
@@ -81,7 +80,9 @@ public class DemonStateMachine : StateMachine
         StartActionMusic();
         if(MustProduceGetHitAnimation())
         {
-           SwitchState(new DemonImpactState(this));
+            DesactiveAllDemonWeapon();
+            StopAllCoroutines();
+            SwitchState(new DemonImpactState(this));
         }
     }
 
@@ -203,7 +204,10 @@ public class DemonStateMachine : StateMachine
     }
 //Unity animator event
     public void AttackEvent(){
-        EventsToPlay.onAttack?.Invoke();
+        int num = Random.Range(0,3);
+        if(num == 0){EventsToPlay.onAttack?.Invoke(); return;}
+        if(num == 1){EventsToPlay.OnAttack2?.Invoke(); return;}
+        EventsToPlay.OnAttack3?.Invoke();
     }
     
 }

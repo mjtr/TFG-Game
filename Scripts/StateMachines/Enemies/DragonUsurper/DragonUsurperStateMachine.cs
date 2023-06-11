@@ -175,6 +175,14 @@ public class DragonUsurperStateMachine : StateMachine
         Destroy(gameObject, time);
     }
 
+    public void ResetNavhMesh()
+    {
+        Agent.enabled = true;
+        Agent.ResetPath();
+        Agent.enabled = false;
+        Agent.enabled = true;
+    }
+
     public void StartActionMusic() 
     {
         GetWarriorPlayerStateMachine().StopAmbientMusic();

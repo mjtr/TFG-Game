@@ -22,6 +22,7 @@ public class DemonDogChasingState : DemonDogBaseState
 
     public override void Enter()
     {
+        stateMachine.Agent.enabled = true;
         if(isFirstTime)
         {
             isFirstTime = false;

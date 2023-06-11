@@ -196,7 +196,7 @@ public class PlantMonsterStateMachine : StateMachine
             currentWeaponConfig.LaunchProjectile(rightHandTransform, leftHandTransform,GetWarriorPlayerHealth(),gameObject, damage);
             return;
         }
-        Health.TakeDamage(gameObject, damage,false);
+        Health.TakeDamage(gameObject, damage,false, true);
 	}
 //Unity animator event
     public void CastingWarmup(int start){

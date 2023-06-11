@@ -25,10 +25,7 @@ public class TrollAttackingState : TrollBaseState
 
     private IEnumerator WaitForAnimationToEnd(int animationHash, float transitionDuration)
     {
-        if(AttackFastter())
-        {
-            timeToWaitEndAnimation = timeToWaitEndAnimation - 1f;
-        }
+      
         stateMachine.Animator.CrossFadeInFixedTime(animationHash, transitionDuration);
         yield return new WaitForSeconds(timeToWaitEndAnimation);
         if(tryCombo)
@@ -41,15 +38,6 @@ public class TrollAttackingState : TrollBaseState
             stateMachine.SwitchState(new TrollIdleState(stateMachine));
         }
         
-    }
-
-    private bool AttackFastter()
-    {
-        int num = Random.Range(0,20);
-        if(num <= 7 ){
-            return true;
-        }
-        return false;
     }
 
     private bool GetRandomTryCombo()
